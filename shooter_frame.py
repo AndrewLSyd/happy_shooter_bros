@@ -44,13 +44,21 @@ def move_right():
     player.move("right")
 
 
-def stop():
-    player.stop()
+def stop_left():
+    player.stop("left")
+
+
+def stop_right():
+    player.stop("right")
+
+
+def jump():
+    player.jump()
 
 
 # keyboard handler
-keydown_inputs = {"left": move_left, "right": move_right}
-keyup_inputs = {"left": stop, "right": stop}
+keydown_inputs = {"left": move_left, "right": move_right, "up": jump}
+keyup_inputs = {"left": stop_left, "right": stop_right}
 
 
 def keydown_handler(key):
@@ -64,15 +72,15 @@ def keyup_handler(key):
         if key == simplegui.KEY_MAP[i]:
             keyup_inputs[i]()
 
+
 #  _____    _____       _ _   _       _ _            ______
 # | ____|  |_   _|     (_) | (_)     | (_)          |  ____|
 # | |__      | |  _ __  _| |_ _  __ _| |_ ___  ___  | |__ _ __ __ _ _ __ ___   ___
 # |___ \     | | | '_ \| | __| |/ _` | | / __|/ _ \ |  __| '__/ _` | '_ ` _ \ / _ \
 #  ___) |   _| |_| | | | | |_| | (_| | | \__ \  __/ | |  | | | (_| | | | | | |  __/
 # |____(_) |_____|_| |_|_|\__|_|\__,_|_|_|___/\___| |_|  |_|  \__,_|_| |_| |_|\___|
-
 frame = simplegui.create_frame("Happy Shooter Bros - Engine", WIDTH, HEIGHT)
-frame.add_label("Welcome to Happy SHooter Bros!!")
+frame.add_label("Welcome to Happy Shooter Bros!!")
 
 #    __     _____            _     _              ______               _
 #   / /    |  __ \          (_)   | |            |  ____|             | |
