@@ -1,2 +1,2 @@
 # happy_shooter_bros
-Happy Shooter Brothers
+Welcome to the Happy Shooter Brothers repo!

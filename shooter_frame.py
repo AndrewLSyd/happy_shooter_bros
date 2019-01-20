@@ -23,6 +23,10 @@ HEIGHT = 675
 # initialize player
 player = shooter_game_engine.Player(WIDTH, HEIGHT, [WIDTH // 2, HEIGHT // 5], 100)
 
+# initialise platforms
+platform = shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2, HEIGHT // 2])
+platform2 = shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2 - 30, HEIGHT // 2])
+
 #  _  _     _____        __   ______               _     _    _                 _ _
 # | || |   |  __ \      / _| |  ____|             | |   | |  | |               | | |
 # | || |_  | |  | | ___| |_  | |____   _____ _ __ | |_  | |__| | __ _ _ __   __| | | ___ _ __ ___
@@ -32,10 +36,15 @@ player = shooter_game_engine.Player(WIDTH, HEIGHT, [WIDTH // 2, HEIGHT // 5], 10
 
 
 def draw(canvas):
-    player.draw(canvas)
+    player.collide_platform(platform)
+    player.collide_platform(platform2)
     player.update()
+    player.draw(canvas)
 
+    platform.draw(canvas)
+    platform2.draw(canvas)
 
+# keyboard handlers
 def move_left():
     player.move("left")
 
@@ -55,8 +64,6 @@ def stop_right():
 def jump():
     player.jump()
 
-
-# keyboard handler
 keydown_inputs = {"left": move_left, "right": move_right, "up": jump}
 keyup_inputs = {"left": stop_left, "right": stop_right}
 
