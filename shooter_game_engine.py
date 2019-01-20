@@ -1,6 +1,9 @@
 """
 shooter game engine.
-Has "Player" class with movement methods, shoot methods
+
+Contains:
+"Player" class with movement methods, shoot methods
+"Platform" class
 """
 try:
     import simplegui
@@ -60,7 +63,7 @@ class Player:
             print("player jumped")
             self._pos_[1] -= 3
             self._vel_[1] -= self._canvas_height_ / 500
-            self._on_ground_ = False
+            self._on_platform_ = False
 
     def stop(self, direction):
         if direction == "left" and self._vel_[0] < 0:
@@ -76,43 +79,24 @@ class Player:
         # gravity
         self._vel_[1] += self._canvas_height_ / 25000
         # terminal velocity for gravity
-        if self._vel_[1] >= self._canvas_height_ / 100:
-            self._vel_[1] = self._canvas_height_ / 100
+        if self._vel_[1] >= self._move_speed_ * 5:
+            self._vel_[1] = self._move_speed_ * 5
 
         # update position based on velocity
         self._pos_[0] += self._vel_[0]
         self._pos_[1] += self._vel_[1]
-
-        # check if on ground and update _on_ground_flag
-        # if self._pos_[1] >= self._canvas_height_ - self._radius_:
-        #     self._on_ground_ = True
-        # elif self._pos_[1] < self._canvas_height_ - self._radius_:
-        #     self._on_ground_ = False
-        #
-        # # if on ground, then set vertical vel to zero and set position to the floor
-        # if self._on_ground_:
-        #     self._pos_[1] = self._canvas_height_ - self._radius_
-        #     self._vel_[1] = 0
-
 
     def collide_platform(self, platform):
         plat_left = platform.get_top_left()
         plat_right = platform.get_top_right()
         # print("checking collision")
         # if player is at the top of the platform, between the left and right corners with a tolerance of 2.5 pixels
-        if (self._pos_[1] + self._radius_ > (plat_left[1] - 2.5) and self._pos_[1] + self._radius_ < (plat_left[1] + 2.5)) and self._pos_[0] >= plat_left[0] and self._pos_[0] <= plat_right[0]:
+        if (self._pos_[1] + self._radius_ > (plat_left[1] - 1.5) and self._pos_[1] + self._radius_ < (plat_left[1] + 1.5)) and self._pos_[0] >= plat_left[0] and self._pos_[0] <= plat_right[0]:
             print("player collided with platform")
             self._on_platform_ = True
             # set vertical vel to 0 and set vertical pos to top of tile
             self._vel_[1] = 0
             self._pos_[1] = plat_left[1] - self._radius_
-        # else:
-        #     self._on_platform_ = False
-        # on ground EXACT
-        # if self._pos_[1] == plat_left[1] - self._radius_ and self._pos_[0] >= plat_left[0] and self._pos_[0] <= plat_right[0]:
-        #     self._on_ground_ = True
-
-
 
 
 class Platform:

@@ -1,6 +1,5 @@
 """
 shooter game frame.
-Creates a Player class and starts the frame
 """
 
 import shooter_game_engine
@@ -24,8 +23,23 @@ HEIGHT = 675
 player = shooter_game_engine.Player(WIDTH, HEIGHT, [WIDTH // 2, HEIGHT // 5], 100)
 
 # initialise platforms
-platform = shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2, HEIGHT // 2])
-platform2 = shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2 - 30, HEIGHT // 2])
+platform_group = set([shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2 - 60, HEIGHT // 2])
+                         , shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2 - 120, HEIGHT // 2])])
+
+# platform = shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2, HEIGHT // 2])
+# platform2 = shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2 - 30, HEIGHT // 2])
+
+
+#  ___      _    _      _                    __                  _   _
+# |__ \    | |  | |    | |                  / _|                | | (_)
+#    ) |   | |__| | ___| |_ __   ___ _ __  | |_ _   _ _ __   ___| |_ _  ___  _ __  ___
+#   / /    |  __  |/ _ \ | '_ \ / _ \ '__| |  _| | | | '_ \ / __| __| |/ _ \| '_ \/ __|
+#  / /_ _  | |  | |  __/ | |_) |  __/ |    | | | |_| | | | | (__| |_| | (_) | | | \__ \
+# |____(_) |_|  |_|\___|_| .__/ \___|_|    |_|  \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
+#                        | |
+
+
+
 
 #  _  _     _____        __   ______               _     _    _                 _ _
 # | || |   |  __ \      / _| |  ____|             | |   | |  | |               | | |
@@ -36,13 +50,13 @@ platform2 = shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2 - 30, HEIGHT
 
 
 def draw(canvas):
-    player.collide_platform(platform)
-    player.collide_platform(platform2)
     player.update()
     player.draw(canvas)
 
-    platform.draw(canvas)
-    platform2.draw(canvas)
+    # platforms
+    for plat in platform_group:
+        player.collide_platform(plat)
+        plat.draw(canvas)
 
 # keyboard handlers
 def move_left():
