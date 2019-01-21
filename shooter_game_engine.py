@@ -62,7 +62,7 @@ class Player:
         if self._on_platform_:
             print("player jumped")
             self._pos_[1] -= 3
-            self._vel_[1] -= self._canvas_height_ / 500
+            self._vel_[1] -= self._canvas_height_ / 250
             self._on_platform_ = False
 
     def stop(self, direction):

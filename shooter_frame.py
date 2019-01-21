@@ -24,7 +24,8 @@ player = shooter_game_engine.Player(WIDTH, HEIGHT, [WIDTH // 2, HEIGHT // 5], 10
 
 # initialise platforms
 platform_group = set([shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2 - 60, HEIGHT // 2])
-                         , shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2 - 120, HEIGHT // 2])])
+                         , shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2 - 120, HEIGHT // 2])
+                         , shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2 - 90, HEIGHT // 2 + 60])])
 
 # platform = shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2, HEIGHT // 2])
 # platform2 = shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2 - 30, HEIGHT // 2])
