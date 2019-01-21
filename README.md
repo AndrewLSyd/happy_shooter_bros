@@ -1,2 +1,4 @@
 # happy_shooter_bros
-Welcome to the Happy Shooter Brothers repo!
+Welcome.
+
+We are working on a zany will be a 2D shooter that will be Happy Shooter Bros!
