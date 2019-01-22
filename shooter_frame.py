@@ -20,15 +20,12 @@ HEIGHT = 675
 
 
 # initialize player
-player = shooter_game_engine.Player(WIDTH, HEIGHT, [WIDTH // 2, HEIGHT // 5], 100)
+player = shooter_game_engine.Player(WIDTH, HEIGHT, [WIDTH // 3, HEIGHT // 5], 100)
 
 # initialise platforms
-platform_group = set([shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2 - 60, HEIGHT // 2])
-                         , shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2 - 120, HEIGHT // 2])
-                         , shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2 - 90, HEIGHT // 2 + 60])])
+plat_map1 = [[20, 20], [10, 15], [2, 3], [20, 15], [7, 10], [7, 9], [13, 10], [13, 11]]
 
-# platform = shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2, HEIGHT // 2])
-# platform2 = shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2 - 30, HEIGHT // 2])
+platform_group = shooter_game_engine.create_platforms(WIDTH, HEIGHT, plat_map1)
 
 
 #  ___      _    _      _                    __                  _   _
@@ -38,10 +35,6 @@ platform_group = set([shooter_game_engine.Platform(WIDTH, HEIGHT, [WIDTH // 2 - 
 #  / /_ _  | |  | |  __/ | |_) |  __/ |    | | | |_| | | | | (__| |_| | (_) | | | \__ \
 # |____(_) |_|  |_|\___|_| .__/ \___|_|    |_|  \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
 #                        | |
-
-
-
-
 #  _  _     _____        __   ______               _     _    _                 _ _
 # | || |   |  __ \      / _| |  ____|             | |   | |  | |               | | |
 # | || |_  | |  | | ___| |_  | |____   _____ _ __ | |_  | |__| | __ _ _ __   __| | | ___ _ __ ___
@@ -58,6 +51,11 @@ def draw(canvas):
     for plat in platform_group:
         player.collide_platform(plat)
         plat.draw(canvas)
+
+
+def respawn():
+    player.set_pos([WIDTH // 3, HEIGHT // 5])
+    player.set_vel([0,0])
 
 # keyboard handlers
 def move_left():
@@ -119,7 +117,7 @@ frame.add_label("Welcome to Happy Shooter Bros!!")
 frame.set_draw_handler(draw)
 frame.set_keydown_handler(keydown_handler)
 frame.set_keyup_handler(keyup_handler)
-
+frame.add_button("respawn", respawn)
 
 #  ______    _____ _             _      __
 # |____  |  / ____| |           | |    / _|

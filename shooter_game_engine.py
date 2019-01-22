@@ -24,6 +24,14 @@ def dist(p, q):
     return math.sqrt((p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2)
 
 
+def create_platforms(canvas_width, canvas_height, plat_map):
+    platform_group = set()
+    for plat in plat_map:
+        platform_group.add(Platform(canvas_width, canvas_height,
+                                    [(plat[1] + 1) * canvas_height // 23, (plat[0] + 1)
+                                     * canvas_width // 40]))
+    return platform_group
+
 #  ____      _____ _
 # |___ \    / ____| |
 #   __) |  | |    | | __ _ ___ ___  ___  ___
@@ -62,7 +70,7 @@ class Player:
         if self._on_platform_:
             print("player jumped")
             self._pos_[1] -= 3
-            self._vel_[1] -= self._canvas_height_ / 250
+            self._vel_[1] -= self._canvas_height_ / 300
             self._on_platform_ = False
 
     def stop(self, direction):
@@ -89,15 +97,22 @@ class Player:
     def collide_platform(self, platform):
         plat_left = platform.get_top_left()
         plat_right = platform.get_top_right()
-        # print("checking collision")
-        # if player is at the top of the platform, between the left and right corners with a tolerance of 2.5 pixels
-        if (self._pos_[1] + self._radius_ > (plat_left[1] - 1.5) and self._pos_[1] + self._radius_ < (plat_left[1] + 1.5)) and self._pos_[0] >= plat_left[0] and self._pos_[0] <= plat_right[0]:
+        # if player is at the top of the platform, between the left and right corners with a tolerance of 1.5 pixels
+        if (self._pos_[1] + self._radius_ > (plat_left[1] - 1.5) and
+            self._pos_[1] + self._radius_ < (plat_left[1] + 1.5)) and\
+                self._pos_[0] >= plat_left[0] and self._pos_[0] <= plat_right[0] and self._vel_[1] > 0:
             print("player collided with platform")
             self._on_platform_ = True
             # set vertical vel to 0 and set vertical pos to top of tile
             self._vel_[1] = 0
             self._pos_[1] = plat_left[1] - self._radius_
 
+    def set_pos(self, pos):
+        self._pos_ = pos
+
+    def set_vel(self, vel):
+        self._vel_[0] = vel[0]
+        self._vel_[1] = vel[1]
 
 class Platform:
     """
@@ -122,6 +137,9 @@ class Platform:
     def draw(self, canvas):
         canvas.draw_polygon([self._top_left_, self._top_right_, self._bot_right_, self._bot_left_],
                             5, "red")
+        canvas.draw_text(str(round(self._pos_[1] / self._canvas_height_ * 23 - 1)) + ", "
+                         + str(round(self._pos_[0] / self._canvas_width_ * 40 - 1)),
+                         [self._top_left_[0], self._pos_[1]], 20, "white")
 
     def get_top_left(self):
         return self._top_left_
