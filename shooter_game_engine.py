@@ -98,8 +98,8 @@ class Player:
         plat_left = platform.get_top_left()
         plat_right = platform.get_top_right()
         # if player is at the top of the platform, between the left and right corners with a tolerance of 1.5 pixels
-        if (self._pos_[1] + self._radius_ > (plat_left[1] - 1.5) and
-            self._pos_[1] + self._radius_ < (plat_left[1] + 1.5)) and\
+        if (self._pos_[1] + self._radius_ > (plat_left[1] - 3) and
+            self._pos_[1] + self._radius_ < (plat_left[1] + 3)) and\
                 self._pos_[0] >= plat_left[0] and self._pos_[0] <= plat_right[0] and self._vel_[1] > 0:
             print("player collided with platform")
             self._on_platform_ = True
