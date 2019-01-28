@@ -5,6 +5,9 @@ try:
     import simplegui
 except ImportError:
     import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
+
+import shooter_global_variables
+
 #  __      _____ _       _           _
 # /_ |    / ____| |     | |         | |
 #  | |   | |  __| | ___ | |__   __ _| |___
@@ -12,8 +15,12 @@ except ImportError:
 #  | |_  | |__| | | (_) | |_) | (_| | \__ \
 #  |_(_)  \_____|_|\___/|_.__/ \__,_|_|___/
 #
-WIDTH = 1200
-HEIGHT = 675
+WIDTH = shooter_global_variables.WIDTH
+HEIGHT = shooter_global_variables.HEIGHT
+# number of rows and columns in the tile map
+TILE_ROWS = shooter_global_variables.TILE_ROWS
+TILE_COLS = shooter_global_variables.TILE_COLS
+TILE_DIM = shooter_global_variables.TILE_DIM
 
 
 class GUI:
@@ -105,3 +112,5 @@ class GUI:
         for plat in self._platform_group_:
             self._player_.collide_platform(plat)
             plat.draw(canvas)
+
+    # need change level function

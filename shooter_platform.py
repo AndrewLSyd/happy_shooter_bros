@@ -1,18 +1,21 @@
 """
 Classes and functions relating to platforms
 """
+import shooter_global_variables
+
 #  __      _____ _       _           _
 # /_ |    / ____| |     | |         | |
 #  | |   | |  __| | ___ | |__   __ _| |___
 #  | |   | | |_ | |/ _ \| '_ \ / _` | / __|
 #  | |_  | |__| | | (_) | |_) | (_| | \__ \
 #  |_(_)  \_____|_|\___/|_.__/ \__,_|_|___/
-
-WIDTH = 1200
-HEIGHT = 675
+#
+WIDTH = shooter_global_variables.WIDTH
+HEIGHT = shooter_global_variables.HEIGHT
 # number of rows and columns in the tile map
-TILE_ROWS = 12
-TILE_COLS = 20
+TILE_ROWS = shooter_global_variables.TILE_ROWS
+TILE_COLS = shooter_global_variables.TILE_COLS
+TILE_DIM = shooter_global_variables.TILE_DIM
 
 #  ___      _    _      _                    __                  _   _
 # |__ \    | |  | |    | |                  / _|                | | (_)
@@ -30,8 +33,8 @@ def create_platforms(plat_map):
     """
     platform_group = set()
     for plat in plat_map:
-        platform_group.add(Platform([(plat[1] + 1) * HEIGHT // TILE_ROWS, (plat[0] + 1)
-                                     * WIDTH // TILE_COLS]))
+        platform_group.add(Platform([(plat[1] + 1) * TILE_DIM, (plat[0] + 1)
+                                     * TILE_DIM]))
     return platform_group
 
 
@@ -52,7 +55,7 @@ class Platform:
         # pos is the centre
         self._pos_ = [pos[0], pos[1]]
         # TILE_COLS columns by 22.5 rows
-        self._half_side_length_ = WIDTH / TILE_COLS / 2
+        self._half_side_length_ = TILE_DIM / 2
         # four corners of the platform
         self._top_left_ = [pos[0] - self._half_side_length_, pos[1] - self._half_side_length_]
         self._top_right_ = [pos[0] + self._half_side_length_, pos[1] - self._half_side_length_]
@@ -66,10 +69,10 @@ class Platform:
         :return:
         """
         canvas.draw_polygon([self._top_left_, self._top_right_, self._bot_right_, self._bot_left_],
-                            5, "red")
-        canvas.draw_text(str(round(self._pos_[1] / HEIGHT * TILE_ROWS - 1)) + ", "
-                         + str(round(self._pos_[0] / WIDTH * TILE_COLS - 1)),
-                         [self._top_left_[0], self._pos_[1]], 20, "white")
+                            3, "red")
+        canvas.draw_text(str(round(self._pos_[1] / TILE_DIM - 1)) + ", "
+                         + str(round(self._pos_[0] / TILE_DIM - 1)),
+                         [self._top_left_[0] + TILE_DIM / 3, self._pos_[1]], 20, "white")
 
     def get_top_left(self):
         """

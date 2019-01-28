@@ -13,8 +13,9 @@ import math
 WIDTH = 1200
 HEIGHT = 675
 # number of rows and columns in the tile map
-TILE_ROWS = 12
+TILE_ROWS = 11.25
 TILE_COLS = 20
+TILE_DIM = WIDTH / TILE_COLS
 
 #  ___      _    _      _                    __                  _   _
 # |__ \    | |  | |    | |                  / _|                | | (_)
@@ -46,9 +47,9 @@ class Player:
         self._vel_ = [0, 0]
         self._health_ = health
         self._on_platform_ = False
-        self._radius_ = WIDTH / TILE_COLS / 2
-        self._move_speed_ = WIDTH / 500
-        self._jump_vel_ = self._move_speed_
+        self._radius_ = TILE_DIM / 2
+        self._move_speed_ = TILE_DIM / 25
+        self._jump_vel_ = TILE_DIM / 17.5
 
     def move(self, direction):
         """
@@ -101,7 +102,7 @@ class Player:
         :return: None
         """
         # gravity
-        self._vel_[1] += HEIGHT / 25000
+        self._vel_[1] += TILE_DIM / 750
         # terminal velocity for gravity
         if self._vel_[1] >= self._move_speed_ * 5:
             self._vel_[1] = self._move_speed_ * 5
