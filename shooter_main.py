@@ -15,6 +15,8 @@ PLAYER = shooter_player.Player([WIDTH // 3, HEIGHT // 5], 100)
 PLAT_MAP1 = [
     [7, 12], [7, 13]
     ,[8, 7], [8, 8], [8, 9], [8, 10]]
+
+
 PLATFORM_GROUP = shooter_platform.create_platforms(PLAT_MAP1)
 
 # initialise GUI with player and platform_group object
