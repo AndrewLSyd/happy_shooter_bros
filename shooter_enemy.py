@@ -1,18 +1,24 @@
 # Implementation of classic arcade game Pong
-import simplegui
+
+try:
+    import simplegui
+except ImportError:
+    import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
+
 import random
 import math
 
 # initialize globals - pos and vel encode vertical info for paddles
 LEFT_WALL = 0
 TOP_WALL = 0
-BOTTOM_WALL = WIDTH
-RIGHT_WALL = HEIGHT
 
 gravity = [0, 3]
 offset = [0, 0]
 line = [0,0]
  
+
+WIDTH = 1200
+HEIGHT = 675
 
 class enemy:
     
@@ -20,7 +26,7 @@ class enemy:
     def __init__(self, start_pos, colour, radius):
         self.position = start_pos
         self.colour = colour
-        self._radius_ = 10
+        self._radius_ = radius
         self._on_platform_ = False
         
         if random.randrange(0,100)> 80:
@@ -46,7 +52,7 @@ class enemy:
         
         #vertical
         
-        if goal[1] < self.position[1] and self.position[1] == BOTTOM_WALL:
+        if goal[1] < self.position[1] and self.position[1] == HEIGHT:
             if random.randrange(0,100) > 20:
                 offset[1] = -speed[1]
             else: offset[1]= 0
@@ -57,8 +63,8 @@ class enemy:
         self.position[0] =self.position[0] + offset[0]
         self.position[1] += offset[1]
           
-        if self.position[1] > BOTTOM_WALL:
-            self.position[1]  = BOTTOM_WALL
+        if self.position[1] > HEIGHT:
+            self.position[1]  = HEIGHT
             
     def collide_platform(self, platform):
         """

@@ -5,7 +5,8 @@ shooter game frame.
 import shooter_player
 import shooter_platform
 import shooter_gui
-import shooter_enemy.py
+import shooter_enemy
+import random
 
 WIDTH = 1200
 HEIGHT = 675
@@ -25,7 +26,7 @@ colour_list = COLOR_LIST = ["Red", "Green", "Yellow", "Purple"]
 enemy_speed = [10, 20]
 enemy_list = []
 for i in range(10):
-    e = enemy([RIGHT_WALL, BOTTOM_WALL], random.choice(colour_list), 50, 10)
+    e = shooter_enemy.enemy([WIDTH, HEIGHT], random.choice(colour_list), 10)
     enemy_list.append(e)
 
 
