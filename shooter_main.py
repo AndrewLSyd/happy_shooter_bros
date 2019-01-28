@@ -2,7 +2,7 @@
 shooter game frame.
 """
 
-import shooter_game_engine as engine
+import shooter_player as engine
 try:
     import simplegui
 except ImportError:
