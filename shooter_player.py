@@ -2,6 +2,7 @@
 Classes and functions related to the player
 """
 import math
+import shooter_global_variables
 
 #  __      _____ _       _           _
 # /_ |    / ____| |     | |         | |
@@ -9,13 +10,13 @@ import math
 #  | |   | | |_ | |/ _ \| '_ \ / _` | / __|
 #  | |_  | |__| | | (_) | |_) | (_| | \__ \
 #  |_(_)  \_____|_|\___/|_.__/ \__,_|_|___/
-
-WIDTH = 1200
-HEIGHT = 675
+#
+WIDTH = shooter_global_variables.WIDTH
+HEIGHT = shooter_global_variables.HEIGHT
 # number of rows and columns in the tile map
-TILE_ROWS = 11.25
-TILE_COLS = 20
-TILE_DIM = WIDTH / TILE_COLS
+TILE_ROWS = shooter_global_variables.TILE_ROWS
+TILE_COLS = shooter_global_variables.TILE_COLS
+TILE_DIM = shooter_global_variables.TILE_DIM
 
 #  ___      _    _      _                    __                  _   _
 # |__ \    | |  | |    | |                  / _|                | | (_)

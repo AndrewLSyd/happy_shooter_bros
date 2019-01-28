@@ -18,6 +18,10 @@ TILE_COLS = shooter_global_variables.TILE_COLS
 TILE_DIM = shooter_global_variables.TILE_DIM
 
 
+# load art assets
+# BACKGROUND_INFO = shooter_global_variables.ImageInfo([WIDTH // 2, HEIGHT // 2], [WIDTH, HEIGHT])
+# BACKGROUND_IMAGE = simplegui._load_local_image("Assets/Backgrounds/background-test.png")
+
 #  ___      _    _      _                    __                  _   _
 # |__ \    | |  | |    | |                  / _|                | | (_)
 #    ) |   | |__| | ___| |_ __   ___ _ __  | |_ _   _ _ __   ___| |_ _  ___  _ __  ___
@@ -74,6 +78,7 @@ class Platform:
         canvas.draw_text(str(round(self._pos_[1] / TILE_DIM - 1)) + ", "
                          + str(round(self._pos_[0] / TILE_DIM - 1)),
                          [self._top_left_[0] + TILE_DIM / 3, self._pos_[1]], 20, "white")
+        # draw tilemap here
 
     def get_top_left(self):
         """
