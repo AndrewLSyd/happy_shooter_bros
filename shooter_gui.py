@@ -153,7 +153,7 @@ class GUI:
             self._player_.collide_platform(plat)
             plat.draw(canvas)
 
-        #enemies
+        # enemies
 
         # draw enemy
         for e in self._enemy_list_:
