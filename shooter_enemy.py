@@ -21,15 +21,17 @@ line = [0,0]
 class enemy:
     
     #initialize enemy 
-    def __init__(self, start_pos, colour, power_flag, radius):
+    def __init__(self, start_pos, colour, radius):
         self.position = start_pos
         self.colour = colour
         self._radius_ = 10
+        self._on_platform_ = False
         
         if random.randrange(0,100)> 80:
             self.power_flag = 1
         else:
             self.power_flag = 0
+       
     
     #movement
     def move(self, goal, speed):
