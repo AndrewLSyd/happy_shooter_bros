@@ -27,7 +27,7 @@ offset = [0, 0]
 
 class enemy:
     
-    #initialize enemy 
+    #initialize enemy
     def __init__(self, start_pos, colour):
         self.position = start_pos
         self.colour = colour

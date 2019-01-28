@@ -9,6 +9,7 @@ Tian, Clem and Ondu
 # Canvas
 * SCREEN SIZE = 1200 x 675 px
 * GRID SIZE = 30 x 30px (40cols x 23rows //NOTE: 23rd row will be truncated by half, due to screen size)
+TRY 60 by 60
 
 # Object sizes
 * PLAYER = 40x60px (20 x 30px photoshop)
@@ -34,3 +35,9 @@ Tian, Clem and Ondu
 5. Create a frame
 6. Register event handlers
 7. Start frame and timers
+
+
+# To do
+* increase grav
+* increase jump velocity
+* solid platforms

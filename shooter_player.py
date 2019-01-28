@@ -12,7 +12,9 @@ import math
 
 WIDTH = 1200
 HEIGHT = 675
-
+# number of rows and columns in the tile map
+TILE_ROWS = 12
+TILE_COLS = 20
 
 #  ___      _    _      _                    __                  _   _
 # |__ \    | |  | |    | |                  / _|                | | (_)
@@ -44,8 +46,9 @@ class Player:
         self._vel_ = [0, 0]
         self._health_ = health
         self._on_platform_ = False
-        self._radius_ = WIDTH / 100
+        self._radius_ = WIDTH / TILE_COLS / 2
         self._move_speed_ = WIDTH / 500
+        self._jump_vel_ = self._move_speed_
 
     def move(self, direction):
         """
@@ -69,7 +72,7 @@ class Player:
         if self._on_platform_:
             print("player jumped")
             self._pos_[1] -= 3
-            self._vel_[1] -= HEIGHT / 300
+            self._vel_[1] -= self._jump_vel_
             self._on_platform_ = False
 
     def stop(self, direction):

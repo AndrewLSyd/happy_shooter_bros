@@ -10,6 +10,9 @@ Classes and functions relating to platforms
 
 WIDTH = 1200
 HEIGHT = 675
+# number of rows and columns in the tile map
+TILE_ROWS = 12
+TILE_COLS = 20
 
 #  ___      _    _      _                    __                  _   _
 # |__ \    | |  | |    | |                  / _|                | | (_)
@@ -27,9 +30,10 @@ def create_platforms(plat_map):
     """
     platform_group = set()
     for plat in plat_map:
-        platform_group.add(Platform([(plat[1] + 1) * HEIGHT // 23, (plat[0] + 1)
-                                     * WIDTH // 40]))
+        platform_group.add(Platform([(plat[1] + 1) * HEIGHT // TILE_ROWS, (plat[0] + 1)
+                                     * WIDTH // TILE_COLS]))
     return platform_group
+
 
 #  ____      _____ _
 # |___ \    / ____| |
@@ -41,14 +45,14 @@ class Platform:
     """
     Platform class.
     pos is the CENTRE of the platform
-    40 columns by 22.5 rows
+    TILE_COLS columns by 22.5 rows
     tiled
     """
     def __init__(self, pos):
         # pos is the centre
         self._pos_ = [pos[0], pos[1]]
-        # 40 columns by 22.5 rows
-        self._half_side_length_ = WIDTH / 40 / 2
+        # TILE_COLS columns by 22.5 rows
+        self._half_side_length_ = WIDTH / TILE_COLS / 2
         # four corners of the platform
         self._top_left_ = [pos[0] - self._half_side_length_, pos[1] - self._half_side_length_]
         self._top_right_ = [pos[0] + self._half_side_length_, pos[1] - self._half_side_length_]
@@ -63,8 +67,8 @@ class Platform:
         """
         canvas.draw_polygon([self._top_left_, self._top_right_, self._bot_right_, self._bot_left_],
                             5, "red")
-        canvas.draw_text(str(round(self._pos_[1] / HEIGHT * 23 - 1)) + ", "
-                         + str(round(self._pos_[0] / WIDTH * 40 - 1)),
+        canvas.draw_text(str(round(self._pos_[1] / HEIGHT * TILE_ROWS - 1)) + ", "
+                         + str(round(self._pos_[0] / WIDTH * TILE_COLS - 1)),
                          [self._top_left_[0], self._pos_[1]], 20, "white")
 
     def get_top_left(self):
