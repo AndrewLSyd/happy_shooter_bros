@@ -1,15 +1,17 @@
 """
-shooter game engine.
-
-Contains:
-"Player" class with movement methods, shoot methods
-"Platform" class
+Classes and functions related to the player
 """
-try:
-    import simplegui
-except ImportError:
-    import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 import math
+
+#  __      _____ _       _           _
+# /_ |    / ____| |     | |         | |
+#  | |   | |  __| | ___ | |__   __ _| |___
+#  | |   | | |_ | |/ _ \| '_ \ / _` | / __|
+#  | |_  | |__| | | (_) | |_) | (_| | \__ \
+#  |_(_)  \_____|_|\___/|_.__/ \__,_|_|___/
+
+WIDTH = 1200
+HEIGHT = 675
 
 
 #  ___      _    _      _                    __                  _   _
@@ -20,17 +22,12 @@ import math
 # |____(_) |_|  |_|\___|_| .__/ \___|_|    |_|  \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
 #                        | |
 #                        |_|
-def dist(p, q):
-    return math.sqrt((p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2)
+def dist(coord1, coord2):
+    """
+    returns the pythagorean distance between two points
+    """
+    return math.sqrt((coord1[0] - coord2[0]) ** 2 + (coord1[1] - coord2[1]) ** 2)
 
-
-def create_platforms(canvas_width, canvas_height, plat_map):
-    platform_group = set()
-    for plat in plat_map:
-        platform_group.add(Platform(canvas_width, canvas_height,
-                                    [(plat[1] + 1) * canvas_height // 23, (plat[0] + 1)
-                                     * canvas_width // 40]))
-    return platform_group
 
 #  ____      _____ _
 # |___ \    / ____| |
@@ -42,15 +39,13 @@ class Player:
     """
     Player class
     """
-    def __init__(self, canvas_width, canvas_height, pos, health):
-        self._canvas_width_ = canvas_width
-        self._canvas_height_ = canvas_height
+    def __init__(self, pos, health):
         self._pos_ = [pos[0], pos[1]]
         self._vel_ = [0, 0]
         self._health_ = health
         self._on_platform_ = False
-        self._radius_ = canvas_width / 100
-        self._move_speed_ = self._canvas_width_ / 500
+        self._radius_ = WIDTH / 100
+        self._move_speed_ = WIDTH / 500
 
     def move(self, direction):
         """
@@ -67,13 +62,22 @@ class Player:
 
     # movement
     def jump(self):
+        """
+        player jumps
+        :return: None
+        """
         if self._on_platform_:
             print("player jumped")
             self._pos_[1] -= 3
-            self._vel_[1] -= self._canvas_height_ / 300
+            self._vel_[1] -= HEIGHT / 300
             self._on_platform_ = False
 
     def stop(self, direction):
+        """
+        stops player horizontal movements
+        :param direction:
+        :return: None
+        """
         if direction == "left" and self._vel_[0] < 0:
             self._vel_[0] = 0
         elif direction == "right" and self._vel_[0] > 0:
@@ -81,11 +85,20 @@ class Player:
 
     # drawing and updating
     def draw(self, canvas):
+        """
+        player draw method. draw handler to call this method to draw player
+        :param canvas:
+        :return: None
+        """
         canvas.draw_circle([self._pos_[0], self._pos_[1]], self._radius_, 2, "red")
 
     def update(self):
+        """
+        updates player position
+        :return: None
+        """
         # gravity
-        self._vel_[1] += self._canvas_height_ / 25000
+        self._vel_[1] += HEIGHT / 25000
         # terminal velocity for gravity
         if self._vel_[1] >= self._move_speed_ * 5:
             self._vel_[1] = self._move_speed_ * 5
@@ -95,12 +108,27 @@ class Player:
         self._pos_[1] += self._vel_[1]
 
     def collide_platform(self, platform):
+        """
+        checks collisions with platforms
+        :param platform:
+        :return: True if player is on platform
+        """
         plat_left = platform.get_top_left()
         plat_right = platform.get_top_right()
-        # if player is at the top of the platform, between the left and right corners with a tolerance of 1.5 pixels
-        if (self._pos_[1] + self._radius_ > (plat_left[1] - 3) and
-            self._pos_[1] + self._radius_ < (plat_left[1] + 3)) and\
-                self._pos_[0] >= plat_left[0] and self._pos_[0] <= plat_right[0] and self._vel_[1] > 0:
+        # y collision to a tolerance of 3 pixels
+        collide_y_down = self._pos_[1] + self._radius_ > (plat_left[1] - 3)
+        collide_y_up = self._pos_[1] + self._radius_ < (plat_left[1] + 3)
+        collide_y = collide_y_up and collide_y_down
+        # x collision
+        collide_x_left = self._pos_[0] >= plat_left[0]
+        collide_x_right = self._pos_[0] <= plat_right[0]
+        collide_x = collide_x_left and collide_x_right
+
+        moving_down = self._vel_[1] > 0
+
+        # if player is at the top of the platform, between the left and right corners and \
+        # moving down
+        if collide_x and collide_y and moving_down:
             print("player collided with platform")
             self._on_platform_ = True
             # set vertical vel to 0 and set vertical pos to top of tile
@@ -108,42 +136,16 @@ class Player:
             self._pos_[1] = plat_left[1] - self._radius_
 
     def set_pos(self, pos):
+        """
+        sets positions of player object
+        """
         self._pos_ = pos
 
     def set_vel(self, vel):
+        """
+        sets velocity of player object
+        :param vel:
+        :return:
+        """
         self._vel_[0] = vel[0]
         self._vel_[1] = vel[1]
-
-class Platform:
-    """
-    Platform class.
-    pos is the CENTRE of the platform
-    40 columns by 22.5 rows
-    tiled
-    """
-    def __init__(self, canvas_width, canvas_height, pos):
-        self._canvas_width_ = canvas_width
-        self._canvas_height_ = canvas_height
-        # pos is the centre
-        self._pos_ = [pos[0], pos[1]]
-        # 40 columns by 22.5 rows
-        self._half_side_length_ = canvas_width / 40 / 2
-        # four corners of the platform
-        self._top_left_ = [pos[0] - self._half_side_length_, pos[1] - self._half_side_length_]
-        self._top_right_ = [pos[0] + self._half_side_length_, pos[1] - self._half_side_length_]
-        self._bot_right_ = [pos[0] + self._half_side_length_, pos[1] + self._half_side_length_]
-        self._bot_left_ = [pos[0] - self._half_side_length_, pos[1] + self._half_side_length_]
-
-    def draw(self, canvas):
-        canvas.draw_polygon([self._top_left_, self._top_right_, self._bot_right_, self._bot_left_],
-                            5, "red")
-        canvas.draw_text(str(round(self._pos_[1] / self._canvas_height_ * 23 - 1)) + ", "
-                         + str(round(self._pos_[0] / self._canvas_width_ * 40 - 1)),
-                         [self._top_left_[0], self._pos_[1]], 20, "white")
-
-    def get_top_left(self):
-        return self._top_left_
-
-    def get_top_right(self):
-        return self._top_right_
-

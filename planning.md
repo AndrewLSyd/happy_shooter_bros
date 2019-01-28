@@ -20,9 +20,9 @@ Tian, Clem and Ondu
 
 # Game file
 * shooter_main.py - area where everything comes together
-* shooter_player.py
-* shooter_enemy.py - enemy classes
-* shooter_GUI - GUI is created, called and GUI.draw etc is defined
+* shooter_player.py - player classes and functions
+* shooter_enemy.py - enemy classes and functions
+* shooter_GUI - GUI object
 * shooter_level.py - each level will be an object of "level" class with attributes like map of whgere all the platforms are, enemeies, sprites
 
 # General code structure

@@ -2,7 +2,8 @@
 shooter game frame.
 """
 
-import shooter_player as engine
+import shooter_player
+import shooter_platform
 try:
     import simplegui
 except ImportError:
@@ -20,12 +21,12 @@ HEIGHT = 675
 
 
 # initialize player
-player = engine.Player(WIDTH, HEIGHT, [WIDTH // 3, HEIGHT // 5], 100)
+player = shooter_player.Player([WIDTH // 3, HEIGHT // 5], 100)
 
 # initialise platforms
 plat_map1 = [[20, 20], [10, 15], [2, 3], [20, 15], [7, 10], [7, 9], [13, 10], [13, 11]]
 
-platform_group = engine.create_platforms(WIDTH, HEIGHT, plat_map1)
+platform_group = shooter_platform.create_platforms(plat_map1)
 
 
 #  ___      _    _      _                    __                  _   _
