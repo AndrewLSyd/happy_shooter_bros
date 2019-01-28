@@ -23,6 +23,40 @@ TILE_COLS = shooter_global_variables.TILE_COLS
 TILE_DIM = shooter_global_variables.TILE_DIM
 
 
+class ImageInfo:
+    """
+    Image class which stores image attributes
+    """
+    def __init__(self, center, size, radius=0, lifespan=None, animated=False):
+        self.center = center
+        self.size = size
+        self.radius = radius
+        if lifespan:
+            self.lifespan = lifespan
+        else:
+            self.lifespan = float('inf')
+        self.animated = animated
+
+    def get_center(self):
+        return self.center
+
+    def get_size(self):
+        return self.size
+
+    def get_radius(self):
+        return self.radius
+
+    def get_lifespan(self):
+        return self.lifespan
+
+    def get_animated(self):
+        return self.animated
+
+# load art assets
+BACKGROUND_INFO = ImageInfo([WIDTH // 2, HEIGHT // 2], [WIDTH, HEIGHT])
+BACKGROUND_IMAGE = simplegui._load_local_image("Assets/Backgrounds/background-test.png")
+
+
 class GUI:
     """
     Class to run game GUI.
@@ -107,6 +141,8 @@ class GUI:
         :param canvas:
         :return:
         """
+        canvas.draw_image(BACKGROUND_IMAGE, BACKGROUND_INFO.get_center(), BACKGROUND_INFO.get_size(), [WIDTH / 2, HEIGHT / 2],
+                          [WIDTH, HEIGHT])
         # player
         self._player_.update()
         self._player_.draw(canvas)
