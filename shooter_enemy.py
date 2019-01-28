@@ -29,12 +29,11 @@ class enemy:
         self._radius_ = radius
         self._on_platform_ = False
         
-        if random.randrange(0,100)> 80:
+        if random.randrange(0, 100) > 80:
             self.power_flag = 1
         else:
             self.power_flag = 0
        
-    
     # movement
     def move(self, goal, speed):
         
@@ -50,21 +49,21 @@ class enemy:
             else:
                 offset[0] = 0.5*speed[0]
         
-        #vertical
+        # vertical
         
         if goal[1] < self._position_[1] and self._position_[1] == HEIGHT:
-            if random.randrange(0,100) > 20:
+            if random.randrange(0, 100) > 20:
                 offset[1] = -speed[1]
-            else: offset[1]= 0
+            else:
+                offset[1] = 0
         else:
             offset[1] = gravity[1]
 
-         
         self._position_[0] = self._position_[0] + offset[0]
         self._position_[1] += offset[1]
           
         if self._position_[1] > HEIGHT:
-            self._position_[1]  = HEIGHT
+            self._position_[1] = HEIGHT
             
     def collide_platform(self, platform):
         """
