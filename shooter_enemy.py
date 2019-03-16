@@ -55,6 +55,7 @@ class enemy:
         if (goal[1] < self._position_[1] and self._position_[1] == HEIGHT) or self._on_platform_ is True:
             if random.randrange(0, 100) > 20:
                 self._offset_[1] = -speed[1]
+                self._on_platform_ = False
             else:
                 self._offset_[1] = 0
         else:
