@@ -123,6 +123,11 @@ class GUI:
         # platforms
         for plat in self._platform_group_:
             self._player_.collide_platform(plat)
+
+            for e in self._enemy_list_:
+                e.collide_platform(plat)
+#            self._enemy_list_.collide_platform(plat)
+
             plat.draw(canvas)
 
         # enemies
