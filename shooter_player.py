@@ -50,7 +50,7 @@ class Player:
         self._on_platform_ = False
         self._radius_ = TILE_DIM / 2
         self._move_speed_ = TILE_DIM / 25
-        self._jump_vel_ = TILE_DIM / 17.5
+        self._jump_vel_ = TILE_DIM / 8.5
 
     def move(self, direction):
         """
@@ -103,7 +103,7 @@ class Player:
         :return: None
         """
         # gravity
-        self._vel_[1] += TILE_DIM / 750
+        self._vel_[1] += TILE_DIM / 300
         # terminal velocity for gravity
         if self._vel_[1] >= self._move_speed_ * 5:
             self._vel_[1] = self._move_speed_ * 5
@@ -121,8 +121,8 @@ class Player:
         plat_left = platform.get_top_left()
         plat_right = platform.get_top_right()
         # y collision to a tolerance of 3 pixels
-        collide_y_down = self._pos_[1] + self._radius_ > (plat_left[1] - 3)
-        collide_y_up = self._pos_[1] + self._radius_ < (plat_left[1] + 3)
+        collide_y_down = self._pos_[1] + self._radius_ > (plat_left[1] - 7.5)
+        collide_y_up = self._pos_[1] + self._radius_ < (plat_left[1] + 7.5)
         collide_y = collide_y_up and collide_y_down
         # x collision
         collide_x_left = self._pos_[0] >= plat_left[0]

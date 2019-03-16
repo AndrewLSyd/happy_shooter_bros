@@ -43,11 +43,10 @@ class GUI:
         # enemy list
         self._enemy_list_ = enemy_list
         self._enemy_speed_ = enemy_speed
-        # self._frame_.add_button('New Game', self.start)
         self._frame_.set_draw_handler(self.draw)
         self._frame_.set_keydown_handler(self.keydown_handler)
         self._frame_.set_keyup_handler(self.keyup_handler)
-        # self._frame_.set_canvas_background("#BCADA1")
+        self._frame_.add_button('Reset player', self.reset_player)
         self._frame_.start()
 
 
@@ -107,6 +106,9 @@ class GUI:
         for i in self._keyup_inputs_:
             if key == simplegui.KEY_MAP[i]:
                 self._keyup_inputs_[i]()
+
+    def reset_player(self):
+        self._player_._pos_ = [WIDTH // 2, HEIGHT // 3]
 
     def draw(self, canvas):
         """

@@ -34,7 +34,10 @@ PLAYER = shooter_player.Player([WIDTH // 3, HEIGHT // 5], 100)
 PLAT_MAP1 = [
     [7, 12, 0, 0], [7, 13, 4, 0]
     , [8, 7, 1, 1], [8, 8, 1, 1], [8, 9, 1, 1], [8, 10, 1, 1]
-    , [5, 7, 1, 1], [5, 5, 1, 1], [5, 9, 1, 1], [5, 10, 1, 1]]
+    , [5, 7, 1, 1], [5, 5, 1, 1], [5, 9, 1, 1], [5, 10, 1, 1]] +\
+            [[10, index, 6, 0] for index in range(TILE_COLS)] +\
+            [[11, index, 1, 1] for index in range(TILE_COLS)]
+
 
 
 PLATFORM_GROUP = shooter_platform.create_platforms(PLAT_MAP1)
