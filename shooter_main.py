@@ -5,6 +5,8 @@ shooter game frame.
 import shooter_player
 import shooter_platform
 import shooter_gui
+import shooter_enemy
+import random
 
 #  __      _____ _       _           _
 # /_ |    / ____| |     | |         | |
@@ -19,6 +21,7 @@ HEIGHT = shooter_global_variables.HEIGHT
 TILE_ROWS = shooter_global_variables.TILE_ROWS
 TILE_COLS = shooter_global_variables.TILE_COLS
 TILE_DIM = shooter_global_variables.TILE_DIM
+
 
 # initialize player
 PLAYER = shooter_player.Player([WIDTH // 3, HEIGHT // 5], 100)
@@ -44,4 +47,4 @@ for i in range(10):
 
 
 # initialise GUI with player and platform_group object
-GUI = shooter_gui.GUI(PLAYER, PLATFORM_GROUP)
+GUI = shooter_gui.GUI(PLAYER, PLATFORM_GROUP, enemy_list, enemy_speed)

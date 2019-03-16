@@ -39,14 +39,15 @@ class GUI:
         self._platform_group_ = platform_group
         self._keydown_inputs_ = {"left": self.move_left, "right": self.move_right, "up": self.jump}
         self._keyup_inputs_ = {"left": self.stop_left, "right": self.stop_right}
+        # enemy list
+        self._enemy_list_ = enemy_list
+        self._enemy_speed_ = enemy_speed
         # self._frame_.add_button('New Game', self.start)
         self._frame_.set_draw_handler(self.draw)
         self._frame_.set_keydown_handler(self.keydown_handler)
         self._frame_.set_keyup_handler(self.keyup_handler)
         # self._frame_.set_canvas_background("#BCADA1")
         self._frame_.start()
-        self._enemy_list_ = enemy_list
-        self._enemy_speed_ = enemy_speed
 
 
     # 4. DEFINE EVENT HANDLERS
@@ -123,12 +124,12 @@ class GUI:
             self._player_.collide_platform(plat)
             plat.draw(canvas)
 
-        #enemies
+        # enemies
 
         # draw enemy
         for e in self._enemy_list_:
             e.move(self._player_._pos_, self._enemy_speed_)
-        for e in self.enemy_list:
+        for e in self._enemy_list_:
             e.draw2(canvas)
 
     # need change level function
