@@ -3,6 +3,7 @@ Classes and functions related to the player
 """
 import math
 import shooter_global_variables
+import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 
 #  __      _____ _       _           _
 # /_ |    / ____| |     | |         | |
@@ -17,6 +18,8 @@ HEIGHT = shooter_global_variables.HEIGHT
 TILE_ROWS = shooter_global_variables.TILE_ROWS
 TILE_COLS = shooter_global_variables.TILE_COLS
 TILE_DIM = shooter_global_variables.TILE_DIM
+
+PLAYER_TILEMAP = simplegui._load_local_image("Assets/Tilemaps/Tilemap_player_70x70.png")
 
 #  ___      _    _      _                    __                  _   _
 # |__ \    | |  | |    | |                  / _|                | | (_)
@@ -48,9 +51,10 @@ class Player:
         self._vel_ = [0, 0]
         self._health_ = health
         self._on_platform_ = False
-        self._radius_ = TILE_DIM / 2
+        self._radius_ = 35
         self._move_speed_ = TILE_DIM / 25
         self._jump_vel_ = TILE_DIM / 8.5
+        self._tilemap_coord_ = [0, 0]
 
     def move(self, direction):
         """
@@ -76,6 +80,7 @@ class Player:
             self._pos_[1] -= 3
             self._vel_[1] -= self._jump_vel_
             self._on_platform_ = False
+            self._tilemap_coord_ = [0, 1]
 
     def stop(self, direction):
         """
@@ -95,7 +100,19 @@ class Player:
         :param canvas:
         :return: None
         """
+        canvas.draw_image(
+            # image
+            PLAYER_TILEMAP,
+            # center_source
+            [(self._tilemap_coord_[0] + 0.5) * 70, (self._tilemap_coord_[1] + 0.5) * 70],
+            # width_height_source
+            [70, 70],
+            # center_dest
+            self._pos_,
+            # width_height_dest
+            [70, 70])
         canvas.draw_circle([self._pos_[0], self._pos_[1]], self._radius_, 2, "red")
+        
 
     def update(self):
         """
@@ -139,6 +156,7 @@ class Player:
             # set vertical vel to 0 and set vertical pos to top of tile
             self._vel_[1] = 0
             self._pos_[1] = plat_left[1] - self._radius_
+            self._tilemap_coord_ = [0, 0]
 
     def set_pos(self, pos):
         """
