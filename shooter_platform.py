@@ -48,7 +48,7 @@ def create_platforms(plat_map):
     """
     platform_group = set()
     for plat in plat_map:
-        platform_group.add(Platform([(plat[1] + 1) * TILE_DIM, (plat[0] + 1)
+        platform_group.add(Platform([(plat[1] + 0.5) * TILE_DIM, (plat[0] + 0.5)
                                      * TILE_DIM, plat[2], plat[3]]))
     print("plat[2]:", plat[2])
     return platform_group
