@@ -12,7 +12,7 @@ Tian, Clem and Ondu
 TRY 60 by 60
 
 # Object sizes
-* PLAYER = 60x70px (30 x 35px photoshop)
+* PLAYER = 70x70px (35 x 35px photoshop)
 
 
 # Plan
