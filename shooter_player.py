@@ -54,7 +54,7 @@ class Player:
         self._radius_ = 35
         self._move_speed_ = TILE_DIM / 25
         self._jump_vel_ = TILE_DIM / 8.5
-        self._tilemap_coord_ = [0, 0]
+        self._tilemap_coord_ = [1, 1]
 
     def move(self, direction):
         """
@@ -80,7 +80,7 @@ class Player:
             self._pos_[1] -= 3
             self._vel_[1] -= self._jump_vel_
             self._on_platform_ = False
-            self._tilemap_coord_ = [0, 1]
+            # self._tilemap_coord_ = [0, 1]
 
     def stop(self, direction):
         """
@@ -128,6 +128,11 @@ class Player:
         # update position based on velocity
         self._pos_[0] += self._vel_[0]
         self._pos_[1] += self._vel_[1]
+
+        if self._tilemap_coord_[0] == 1:
+            self._tilemap_coord_[0] = 0
+        elif self._tilemap_coord_[0] == 0:
+            self._tilemap_coord_[0] = 1
 
     def collide_platform(self, platform):
         """
