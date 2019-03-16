@@ -28,12 +28,13 @@ RIGHT_WALL = 600
 # initialize player
 PLAYER = shooter_player.Player([WIDTH // 3, HEIGHT // 5], 100)
 # initialise platforms
+# position uses "matrix notation of rows/cols"
+# [tile pos rows, tile pos cols, tile map x coord, tile map y coord (computing one)]
+
 PLAT_MAP1 = [
-    [7, 12], [7, 13]
-    ,[8, 7], [8, 8], [8, 9], [8, 10]]
-PLAT_TILE_MAP2 = [
-    [0, 14], [0, 14]
-    ,[0, 14], [0, 0], [0, 0], [0, 0]]
+    [7, 12, 0, 0], [7, 13, 4, 0]
+    , [8, 7, 1, 1], [8, 8, 1, 1], [8, 9, 1, 1], [8, 10, 1, 1]
+    , [5, 7, 1, 1], [5, 5, 1, 1], [5, 9, 1, 1], [5, 10, 1, 1]]
 
 
 PLATFORM_GROUP = shooter_platform.create_platforms(PLAT_MAP1)
@@ -49,4 +50,5 @@ for i in range(10):
 
 
 # initialise GUI with player and platform_group object
+# GUI takes PLAT_TILE_MAP as another argument
 GUI = shooter_gui.GUI(PLAYER, PLATFORM_GROUP, enemy_list, enemy_speed)

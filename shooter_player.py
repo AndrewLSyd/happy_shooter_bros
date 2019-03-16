@@ -134,7 +134,7 @@ class Player:
         # if player is at the top of the platform, between the left and right corners and \
         # moving down
         if collide_x and collide_y and moving_down:
-            print("player collided with platform")
+            # print("player collided with platform")
             self._on_platform_ = True
             # set vertical vel to 0 and set vertical pos to top of tile
             self._vel_[1] = 0

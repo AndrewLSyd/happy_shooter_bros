@@ -36,6 +36,7 @@ class GUI:
     def __init__(self, player, platform_group, enemy_list, enemy_speed):
         self._frame_ = simplegui.create_frame("Happy Shooter Bros - Engine", WIDTH, HEIGHT)
         self._player_ = player
+        #
         self._platform_group_ = platform_group
         self._keydown_inputs_ = {"left": self.move_left, "right": self.move_right, "up": self.jump}
         self._keyup_inputs_ = {"left": self.stop_left, "right": self.stop_right}
