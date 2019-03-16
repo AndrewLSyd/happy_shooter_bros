@@ -2,6 +2,7 @@
 shooter game frame.
 """
 
+import shooter_global_variables
 import shooter_player
 import shooter_platform
 import shooter_gui
@@ -21,7 +22,8 @@ HEIGHT = shooter_global_variables.HEIGHT
 TILE_ROWS = shooter_global_variables.TILE_ROWS
 TILE_COLS = shooter_global_variables.TILE_COLS
 TILE_DIM = shooter_global_variables.TILE_DIM
-
+BOTTOM_WALL = 400
+RIGHT_WALL = 600
 
 # initialize player
 PLAYER = shooter_player.Player([WIDTH // 3, HEIGHT // 5], 100)
@@ -41,7 +43,7 @@ colour_list = COLOR_LIST = ["Red", "Green", "Yellow", "Purple"]
 enemy_speed = [10, 20]
 enemy_list = []
 for i in range(10):
-    e = enemy([RIGHT_WALL, BOTTOM_WALL], random.choice(colour_list), 50, 10)
+    e = shooter_enemy.enemy([200, 200], random.choice(colour_list), 10)
     enemy_list.append(e)
 
 

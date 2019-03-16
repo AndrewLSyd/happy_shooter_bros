@@ -1,7 +1,12 @@
 """
 Classes and functions relating to platforms
 """
-import shooter_global_variables.py
+import shooter_global_variables
+try:
+    import simplegui
+except ImportError:
+    import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
+
 
 #  __      _____ _       _           _
 # /_ |    / ____| |     | |         | |
