@@ -1,7 +1,7 @@
 """
 Classes and functions relating to platforms
 """
-import shooter_global_variables
+import shooter_global_variables.py
 
 #  __      _____ _       _           _
 # /_ |    / ____| |     | |         | |
@@ -19,8 +19,8 @@ TILE_DIM = shooter_global_variables.TILE_DIM
 
 
 # load art assets
-# BACKGROUND_INFO = shooter_global_variables.ImageInfo([WIDTH // 2, HEIGHT // 2], [WIDTH, HEIGHT])
-# BACKGROUND_IMAGE = simplegui._load_local_image("Assets/Backgrounds/background-test.png")
+BACKGROUND_INFO = shooter_global_variables.ImageInfo([WIDTH // 2, HEIGHT // 2], [WIDTH, HEIGHT])
+BACKGROUND_IMAGE = simplegui._load_local_image("Assets/Backgrounds/background-test.png")
 
 #  ___      _    _      _                    __                  _   _
 # |__ \    | |  | |    | |                  / _|                | | (_)

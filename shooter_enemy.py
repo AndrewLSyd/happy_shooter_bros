@@ -4,16 +4,12 @@ import random
 import math
 
 # initialize globals - pos and vel encode vertical info for paddles
-WIDTH = 600
-HEIGHT = 400       
-
 LEFT_WALL = 0
 TOP_WALL = 0
-BOTTOM_WALL = 400
-RIGHT_WALL = 600
+BOTTOM_WALL = WIDTH
+RIGHT_WALL = HEIGHT
 
 gravity = [0, 3]
-speed = [10, 20]
 offset = [0, 0]
 line = [0,0]
  
@@ -103,17 +99,4 @@ class enemy:
 
         canvas.draw_circle(self.position, self._radius_, 1, self.colour)
         
-        
-colour_list = COLOR_LIST = ["Red", "Green", "Yellow", "Purple"]
-enemy_list = []
-for i in range(10):
-    e = enemy([RIGHT_WALL, BOTTOM_WALL], random.choice(colour_list), 50, 10)
-    enemy_list.append(e)
-        
 
-def draw(canvas):
-    # draw enemy
-    for e in enemy_list:
-        e.move(player._pos_, speed)
-    for e in enemy_list:
-        e.draw2(canvas)

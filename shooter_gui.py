@@ -33,7 +33,7 @@ class GUI:
     Class to run game GUI.
     """
 
-    def __init__(self, player, platform_group):
+    def __init__(self, player, platform_group, enemy_list, enemy_speed):
         self._frame_ = simplegui.create_frame("Happy Shooter Bros - Engine", WIDTH, HEIGHT)
         self._player_ = player
         self._platform_group_ = platform_group
@@ -45,6 +45,9 @@ class GUI:
         self._frame_.set_keyup_handler(self.keyup_handler)
         # self._frame_.set_canvas_background("#BCADA1")
         self._frame_.start()
+        self._enemy_list_ = enemy_list
+        self._enemy_speed_ = enemy_speed
+
 
     # 4. DEFINE EVENT HANDLERS
     # keyboard handlers
@@ -119,5 +122,13 @@ class GUI:
         for plat in self._platform_group_:
             self._player_.collide_platform(plat)
             plat.draw(canvas)
+
+        #enemies
+
+        # draw enemy
+        for e in self._enemy_list_:
+            e.move(self._player_._pos_, self._enemy_speed_)
+        for e in self.enemy_list:
+            e.draw2(canvas)
 
     # need change level function
