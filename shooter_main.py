@@ -44,10 +44,11 @@ PLATFORM_GROUP = shooter_platform.create_platforms(PLAT_MAP1)
 
 # initialize enemy
 colour_list = COLOR_LIST = ["Red", "Green", "Yellow", "Purple"]
-enemy_speed = [10, 20]
+enemy_speed = [10, 2*TILE_DIM + 20]
 enemy_list = []
 for i in range(10):
-    e = shooter_enemy.enemy([200, 200], random.choice(colour_list), 10)
+    print("[WIDTH, HEIGHT - 1.25 * TILE_DIM]:", [WIDTH, HEIGHT - 1.25 * TILE_DIM])
+    e = shooter_enemy.enemy([WIDTH, HEIGHT - 1.25 * TILE_DIM], random.choice(colour_list), 10)
     enemy_list.append(e)
 
 

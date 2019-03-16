@@ -7,6 +7,7 @@ except ImportError:
 
 import random
 import math
+import shooter_global_variables
 
 # initialize globals - pos and vel encode vertical info for paddles
 LEFT_WALL = 0
@@ -16,13 +17,27 @@ gravity = [0, 3]
 line = [0, 0]
  
 
-WIDTH = 1200
-HEIGHT = 675
+WIDTH = shooter_global_variables.WIDTH
+HEIGHT = shooter_global_variables.HEIGHT
+
+# number of rows and columns in the tile map
+TILE_ROWS = shooter_global_variables.TILE_ROWS
+TILE_COLS = shooter_global_variables.TILE_COLS
+TILE_DIM = shooter_global_variables.TILE_DIM
 
 class enemy:
 
     # initialize enemy
     def __init__(self, start_pos, colour, radius):
+
+    # random starting position that is on the edge of the screen, assuming start position is left side of screen
+        if random.randrange(0, 100) > 50:
+            start_pos[0] = start_pos[0] + 50
+            start_pos[1] = start_pos[1] - 50
+        else:
+            start_pos[0] = start_pos[0] - WIDTH - 50
+            start_pos[1] = start_pos[1] - 50
+
         self._position_ = start_pos
         self.colour = colour
         self._radius_ = radius
@@ -51,10 +66,10 @@ class enemy:
                 self._offset_[0] = 0.5*speed[0]
         
         # vertical
-        #if they are on the ground or on a platform then randomly jump
-        if (goal[1] < self._position_[1] and self._position_[1] == HEIGHT) or self._on_platform_ is True:
-            if random.randrange(0, 100) > 20:
-                self._offset_[1] = -speed[1]
+        # if they are on the ground or on a platform then randomly jump
+        if (goal[1] < self._position_[1] and self._position_[1] == HEIGHT - 1.25 * TILE_DIM) or self._on_platform_ is True:
+            if random.randrange(0, 100) > 90:
+                self._offset_[1] = - speed[1]
                 self._on_platform_ = False
             else:
                 self._offset_[1] = 0
@@ -64,8 +79,8 @@ class enemy:
         self._position_[0] = self._position_[0] + self._offset_[0]
         self._position_[1] += self._offset_[1]
           
-        if self._position_[1] > HEIGHT:
-            self._position_[1] = HEIGHT
+        if self._position_[1] > HEIGHT - 1.25 * TILE_DIM:
+            self._position_[1] = HEIGHT - 1.25 * TILE_DIM
 
     def collide_platform(self, platform):
         """
@@ -89,7 +104,7 @@ class enemy:
         # if player is at the top of the platform, between the left and right corners and \
         # moving down
         if collide_x and collide_y and moving_down:
-            print("enemy collided with platform")
+            # print("enemy collided with platform")
             self._on_platform_ = True
             # set vertical vel to 0 and set vertical pos to top of tile
             self._offset_[1] = 0
