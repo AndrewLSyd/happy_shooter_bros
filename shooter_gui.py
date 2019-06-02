@@ -118,9 +118,6 @@ class GUI:
         """
         canvas.draw_image(BACKGROUND_IMAGE, BACKGROUND_INFO.get_center(), BACKGROUND_INFO.get_size(), [WIDTH / 2, HEIGHT / 2],
                           [WIDTH, HEIGHT])
-        # player
-        self._player_.update()
-        self._player_.draw(canvas)
 
         # platforms
         for plat in self._platform_group_:
@@ -139,5 +136,9 @@ class GUI:
             e.move(self._player_._pos_, self._enemy_speed_)
         for e in self._enemy_list_:
             e.draw2(canvas)
+
+        # player
+        self._player_.update()
+        self._player_.draw(canvas)
 
     # need change level function
