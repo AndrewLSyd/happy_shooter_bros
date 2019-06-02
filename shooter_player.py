@@ -4,7 +4,7 @@ Classes and functions related to the player
 import math
 import shooter_global_variables
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
-
+from copy import deepcopy
 #  __      _____ _       _           _
 # /_ |    / ____| |     | |         | |
 #  | |   | |  __| | ___ | |__   __ _| |___
@@ -18,6 +18,8 @@ HEIGHT = shooter_global_variables.HEIGHT
 TILE_ROWS = shooter_global_variables.TILE_ROWS
 TILE_COLS = shooter_global_variables.TILE_COLS
 TILE_DIM = shooter_global_variables.TILE_DIM
+PLATFORM_HIST = []
+
 
 PLAYER_TILEMAP = simplegui._load_local_image("Assets/Tilemaps/Tilemap_player_70x70.png")
 
@@ -47,6 +49,7 @@ class Player:
     Player class
     """
     def __init__(self, pos, health):
+        global PLATFORM_HIST
         self._pos_ = [pos[0], pos[1]]
         self._vel_ = [0, 0]
         self._health_ = health
@@ -58,6 +61,8 @@ class Player:
         # integer value between 0 and 100 inclusive representing state in walk cycle
         self._walk_cycle_pos_ = 0
         self._direction_offset_ = 0
+
+        PLATFORM_HIST = [deepcopy(self._pos_)]
 
     def move(self, direction):
         """
@@ -162,7 +167,6 @@ class Player:
         collide_x_left = self._pos_[0] >= plat_left[0]
         collide_x_right = self._pos_[0] <= plat_right[0]
         collide_x = collide_x_left and collide_x_right
-
         moving_down = self._vel_[1] > 0
 
         # if player is at the top of the platform, between the left and right corners and \
@@ -174,6 +178,10 @@ class Player:
             self._vel_[1] = 0
             self._pos_[1] = plat_left[1] - self._radius_
             self._tilemap_coord_ = [0, 0]
+
+            if self._pos_[1] != PLATFORM_HIST[-1][1]:
+                PLATFORM_HIST.append(deepcopy(self._pos_))
+                print("LIST APPENDED", PLATFORM_HIST)
 
     def set_pos(self, pos):
         """
