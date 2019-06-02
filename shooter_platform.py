@@ -50,7 +50,6 @@ def create_platforms(plat_map):
     for plat in plat_map:
         platform_group.add(Platform([(plat[1] + 0.5) * TILE_DIM, (plat[0] + 0.5)
                                      * TILE_DIM, plat[2], plat[3]]))
-    print("plat[2]:", plat[2])
     return platform_group
 
 
@@ -91,8 +90,8 @@ class Platform:
         canvas.draw_polygon([self._top_left_, self._top_right_, self._bot_right_, self._bot_left_],
                             3, "red")
         # draw_image(image, center_source, width_height_source, center_dest, width_height_dest, rotation=0)
-        print("self._tilemap_coord[0]", self._tilemap_coord[0])
-        print("self._tilemap_coord[1]", self._tilemap_coord[1])
+        # print("self._tilemap_coord[0]", self._tilemap_coord[0])
+        # print("self._tilemap_coord[1]", self._tilemap_coord[1])
         canvas.draw_image(
             # image
             PLATFORM_TILEMAP,

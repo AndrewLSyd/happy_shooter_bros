@@ -32,11 +32,11 @@ PLAYER = shooter_player.Player([WIDTH // 3, HEIGHT // 5], 100)
 # [tile pos rows, tile pos cols, tile map x coord, tile map y coord (computing one)]
 
 PLAT_MAP1 = [
-    [7, 12, 0, 0], [7, 13, 4, 0]
-    , [8, 7, 1, 1], [8, 8, 1, 1], [8, 9, 1, 1], [8, 10, 1, 1]
-    , [5, 7, 1, 1], [5, 5, 1, 1], [5, 9, 1, 1], [5, 10, 1, 1]] +\
-            [[10, index, 6, 0] for index in range(TILE_COLS)] +\
-            [[11, index, 1, 1] for index in range(TILE_COLS)]
+    [6, 12, 0, 0], [6, 13, 4, 0]
+    , [7, 7, 1, 1], [7, 8, 1, 1], [7, 9, 1, 1], [7, 10, 1, 1]
+    , [4, 7, 1, 1], [4, 5, 1, 1], [4, 9, 1, 1], [4, 10, 1, 1]] +\
+            [[9, index, 6, 0] for index in range(TILE_COLS)] +\
+            [[10, index, 1, 1] for index in range(TILE_COLS)]
 
 
 
@@ -47,7 +47,7 @@ colour_list = COLOR_LIST = ["Red", "Green", "Yellow", "Purple"]
 enemy_speed = [10, 2*TILE_DIM + 20]
 enemy_list = []
 for i in range(10):
-    print("[WIDTH, HEIGHT - 1.25 * TILE_DIM]:", [WIDTH, HEIGHT - 1.25 * TILE_DIM])
+    # print("[WIDTH, HEIGHT - 1.25 * TILE_DIM]:", [WIDTH, HEIGHT - 1.25 * TILE_DIM])
     e = shooter_enemy.enemy([WIDTH, HEIGHT - 1.25 * TILE_DIM], random.choice(colour_list), 10)
     enemy_list.append(e)
 

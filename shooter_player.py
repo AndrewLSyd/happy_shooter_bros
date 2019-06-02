@@ -52,9 +52,12 @@ class Player:
         self._health_ = health
         self._on_platform_ = False
         self._radius_ = 35
-        self._move_speed_ = TILE_DIM / 25
-        self._jump_vel_ = TILE_DIM / 8.5
+        self._move_speed_ = TILE_DIM / 10
+        self._jump_vel_ = TILE_DIM / 5
         self._tilemap_coord_ = [1, 1]
+        # integer value between 0 and 100 inclusive representing state in walk cycle
+        self._walk_cycle_pos_ = 0
+        self._direction_offset_ = 0
 
     def move(self, direction):
         """
@@ -64,10 +67,13 @@ class Player:
         if direction == "left":
             print("player move_left")
             self._vel_[0] = -self._move_speed_
+            self._direction_offset_ = 5
+
 
         elif direction == "right":
             print("player move_right")
             self._vel_[0] = self._move_speed_
+            self._direction_offset_ = 0
 
     # movement
     def jump(self):
@@ -104,7 +110,7 @@ class Player:
             # image
             PLAYER_TILEMAP,
             # center_source
-            [(self._tilemap_coord_[0] + 0.5) * 70, (self._tilemap_coord_[1] + 0.5) * 70],
+            [(self._tilemap_coord_[0] + 0.5) * 70, (self._tilemap_coord_[1] + 0.5 + self._direction_offset_) * 70],
             # width_height_source
             [70, 70],
             # center_dest
@@ -120,7 +126,7 @@ class Player:
         :return: None
         """
         # gravity
-        self._vel_[1] += TILE_DIM / 300
+        self._vel_[1] += TILE_DIM / 120
         # terminal velocity for gravity
         if self._vel_[1] >= self._move_speed_ * 5:
             self._vel_[1] = self._move_speed_ * 5
@@ -133,6 +139,12 @@ class Player:
         #     self._tilemap_coord_[0] = 0
         # elif self._tilemap_coord_[0] == 0:
         #     self._tilemap_coord_[0] = 1
+
+        # if moving update walk cycle
+        if abs(self._vel_[0]) > 0 and self._on_platform_:
+            self._walk_cycle_pos_ = (self._walk_cycle_pos_ + 15) % 100
+            self._tilemap_coord_ = [0 + self._walk_cycle_pos_ // 50, 1]
+            print("self._walk_cycle_pos_:", self._walk_cycle_pos_)
 
     def collide_platform(self, platform):
         """
