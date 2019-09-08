@@ -64,17 +64,25 @@ class enemy:
                 self._offset_[0] = -speed[0]
             else:
                 self._offset_[0] = -0.5*speed[0]
+        elif goal == self._position_[0]:
+            if random.range(0, 100) > 60:
+                self._offset_[0] = 0.6*speed[0]
+            elif random.range(0, 100) < 40:
+                self._offset_[0] = -0.6*speed[0]
         
         # vertical
         # if they are on the ground or on a platform then randomly jump
         if (goal[1] < self._position_[1] and self._position_[1] == HEIGHT - 1.25 * TILE_DIM) or self._on_platform_ is True:
             if random.randrange(0, 100) > 90:
-                self._offset_[1] = -0.02*speed[1]
+                self._offset_[1] = -0.2*speed[1] + gravity[1]
                 self._on_platform_ = False
+
             else:
                 self._offset_[1] = 0
-        elif (self._offset_[1]) < 0 and self._offset_[1] > -0.4*speed[1]:
-            self._offset_[1] = self._offset_[1] - 0.25 * speed[1] + gravity[1]
+        # if enemy is in midair and offset is not too great
+        elif self._offset_[1] < 0 and self._offset_[1] > -0.5*speed[1]:
+            self._offset_[1] = self._offset_[1] - 5*gravity[1]
+            print(speed[1], gravity[1], self._offset_[1])
 
         else:
             self._offset_[1] = gravity[1]
