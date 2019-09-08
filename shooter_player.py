@@ -5,6 +5,8 @@ import math
 import shooter_global_variables
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 from copy import deepcopy
+import random
+
 #  __      _____ _       _           _
 # /_ |    / ____| |     | |         | |
 #  | |   | |  __| | ___ | |__   __ _| |___
@@ -15,14 +17,19 @@ from copy import deepcopy
 # loading global variables
 WIDTH = shooter_global_variables.WIDTH
 HEIGHT = shooter_global_variables.HEIGHT
+
 # number of rows and columns in the tile map
 TILE_ROWS = shooter_global_variables.TILE_ROWS
 TILE_COLS = shooter_global_variables.TILE_COLS
 TILE_DIM = shooter_global_variables.TILE_DIM
 
-PLATFORM_HIST = []
-# set used to hold bullet objects
-bullet_group = set([])
+# player constants
+PIXEL_THRESHOLD = 5  # pixel threshold for platform vertical collision detection
+PLAYER_RADIUS = 35
+PLAYER_MOVE_SPEED = 0.1
+
+# bullet constants
+BULLET_SPEED = 25
 
 # art assets
 PLAYER_TILEMAP = simplegui._load_local_image("Assets/Tilemaps/Tilemap_player_70x70.png")
@@ -54,26 +61,23 @@ class Player:
     """
     Player class
     """
-    def __init__(self, pos, health, bullet_group):
-        global PLATFORM_HIST
+    def __init__(self, pos, health, bullet_group=set([])):
         self._pos_ = [pos[0], pos[1]]
         self._vel_ = [0, 0]
         self._health_ = health
         self._on_platform_ = False  # used for collision detection and to determine whether the player can jump
-        self._radius_ = 35
-        self._move_speed_run = TILE_DIM * 0.1
+        self._radius_ = PLAYER_RADIUS
+        self._move_speed_run = TILE_DIM * PLAYER_MOVE_SPEED
         self._move_speed_crouch = self._move_speed_run * 0.5
         self._move_speed_ = self._move_speed_run
         self._jump_vel_ = TILE_DIM * 0.2
         self._tilemap_coord_ = [1, 1]       
-        self._walk_cycle_pos_ = 0  # integer value between 0 and 100 inclusive representing state in walk cycle
+        self._walk_cycle_pos_ = 0  # integer value between 0 and 100 inclusive representing state in walk cycle        
         # tilemap offsets
         self._direction_offset_ = 0
         self._stance_offset_ = 0
         self._crouching_ = False
-        self.bullet_group = bullet_group
-
-        PLATFORM_HIST = [deepcopy(self._pos_)]
+        self.bullet_group = bullet_group  # set used to hold bullet objects
 
     def move(self, direction):
         """
@@ -95,14 +99,16 @@ class Player:
             if self._on_platform_:
                 self._stance_offset_ = 1
 
-    # player shoots a buellet
+    # shoots a bullet
     def shoot(self):
-        crouch_offset = self._crouching_ * 10
-
+        # recoil variable, higher recoil if not crouching
+        crouch_offset = self._crouching_ * PLAYER_RADIUS * 2 / 7
+        recoil = random.randint(-5, 20) + max(0, self._crouching_ - 1) * random.randint(-5, 6)
+# pos, direction, rotation
         if self._direction_offset_:
-            a_bullet = Bullet(deepcopy([self.get_pos()[0] - 25, self.get_pos()[1] + 10 + crouch_offset]), 'left', 1, 1, 10)
+            a_bullet = Bullet(deepcopy([self.get_pos()[0] - PLAYER_RADIUS * 5 / 7, self.get_pos()[1] + crouch_offset + recoil]), 'left', 0)
         else:
-            a_bullet = Bullet(deepcopy([self.get_pos()[0] + 25, self.get_pos()[1] + 10 + crouch_offset]), 'right', 1, 1, 10)
+            a_bullet = Bullet(deepcopy([self.get_pos()[0] + PLAYER_RADIUS * 5 / 7, self.get_pos()[1] + crouch_offset + recoil]), 'right', 0)
         self.bullet_group.add(a_bullet)
 
     # movement
@@ -138,7 +144,6 @@ class Player:
         """
         self._crouching_ = True
         self._move_speed_ = self._move_speed_crouch
-        # print("player crouched")
 
     def stop_crouch(self):
         """
@@ -146,7 +151,6 @@ class Player:
         """
         self._crouching_ = False
         self._move_speed_ = self._move_speed_run
-        # print("player stopped crouching")
 
     # drawing and updating
     def draw(self, canvas):
@@ -229,8 +233,8 @@ class Player:
         plat_left = platform.get_top_left()
         plat_right = platform.get_top_right()
         # y collision to a tolerance of 3 pixels
-        collide_y_down = self._pos_[1] + self._radius_ > (plat_left[1] - max(5, 0.5 * abs(self._vel_[1])))
-        collide_y_up = self._pos_[1] + self._radius_ < (plat_left[1] + max(5, 0.5 * abs(self._vel_[1])))
+        collide_y_down = self._pos_[1] + self._radius_ > (plat_left[1] - max(PIXEL_THRESHOLD, 0.5 * abs(self._vel_[1])))
+        collide_y_up = self._pos_[1] + self._radius_ < (plat_left[1] + max(PIXEL_THRESHOLD, 0.5 * abs(self._vel_[1])))
         collide_y = collide_y_up and collide_y_down
         # x collision
         collide_x_left = self._pos_[0] >= plat_left[0]
@@ -247,10 +251,6 @@ class Player:
             self._vel_[1] = 0
             self._pos_[1] = plat_left[1] - self._radius_
             self._tilemap_coord_ = [0, 0]
-
-            if self._pos_[1] != PLATFORM_HIST[-1][1]:
-                PLATFORM_HIST.append(deepcopy(self._pos_))
-                # print("LIST APPENDED", PLATFORM_HIST)
 
     # getters and setters
     def set_pos(self, pos):
@@ -278,13 +278,13 @@ class Bullet:
     """
     Bullet class
     """
-    def __init__(self, pos, direction, age, lifespan, radius):
+    def __init__(self, pos, direction, rotation):
         self._pos_ = pos     
         self._direction_ = direction   
-        self._age_ = age
-        self._life_span_ = lifespan
-        self._radius_ = radius
-        self._vel_ = 25
+        self._age_ = 0
+        self._life_span_ = 25
+        self._radius_ = 16
+        self._vel_ = [BULLET_SPEED, 0]
 
     def update(self):
         """
@@ -294,9 +294,11 @@ class Bullet:
 
         # update position based on velocity
         if self._direction_ == "right":
-            self._pos_[0] += self._vel_     
+            self._pos_[0] += self._vel_[0]
+            self._pos_[1] += self._vel_[1]  
         else:
-            self._pos_[0] -= self._vel_     
+            self._pos_[0] -= self._vel_[0]
+            self._pos_[1] += self._vel_[1]  
 
 
     def draw(self, canvas):
@@ -331,4 +333,8 @@ class Bullet:
                 [32, 16])
 
         canvas.draw_circle([self._pos_[0], self._pos_[1]], self._radius_, 2, "red")
-        
+    def get_age(self):
+        """
+        returns the age
+        """
+        return self._age_

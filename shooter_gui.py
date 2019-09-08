@@ -34,14 +34,14 @@ class GUI:
     Class to run game GUI.
     """
 
-    def __init__(self, player, platform_group, enemy_list, enemy_speed, bullet_list):
+    def __init__(self, player, platform_group, enemy_list, enemy_speed):
         self._frame_ = simplegui.create_frame("Happy Shooter Bros - Engine", WIDTH, HEIGHT)
         self._player_ = player
-        self._bullet_list_ = bullet_list
 
         self._platform_group_ = platform_group
         self._keydown_inputs_ = {"left": self.move_left, "right": self.move_right, "up": self.jump, "down":self.crouch, "space":self.shoot}
         self._keyup_inputs_ = {"left": self.stop_left, "right": self.stop_right, "down":self.stop_crouch,}
+
         # enemy list
         self._enemy_list_ = enemy_list
         self._enemy_speed_ = enemy_speed
@@ -49,8 +49,7 @@ class GUI:
         self._frame_.set_keydown_handler(self.keydown_handler)
         self._frame_.set_keyup_handler(self.keyup_handler)
         self._frame_.add_button('Reset player', self.reset_player)
-        self._frame_.start()
-        
+        self._frame_.start()     
 
 
     # 4. DEFINE EVENT HANDLERS
@@ -163,7 +162,10 @@ class GUI:
         self._player_.update()
         self._player_.draw(canvas)
 
-        for bullet in self._player_.bullet_group:
+        # bullets
+        for bullet in self._player_.bullet_group.copy():
+            if bullet.get_age() > 25:
+                self._player_.bullet_group.remove(bullet)
             bullet.update()
             bullet.draw(canvas)
 

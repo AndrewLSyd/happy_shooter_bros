@@ -198,5 +198,5 @@ class enemy:
             # width_height_dest
             [90, 90])
 
-        print((0.5 + self._stance_offset_)*90)
+        # print((0.5 + self._stance_offset_)*90)
 
