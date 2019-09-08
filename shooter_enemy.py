@@ -26,6 +26,9 @@ TILE_ROWS = shooter_global_variables.TILE_ROWS
 TILE_COLS = shooter_global_variables.TILE_COLS
 TILE_DIM = shooter_global_variables.TILE_DIM
 
+player_speed = TILE_DIM * 0.1
+
+
 class enemy:
 
     # initialize enemy
@@ -42,12 +45,12 @@ class enemy:
         self._position_ = start_pos
         self.colour = colour
         self._radius_ = radius
-        self._on_platform_ = False
         self._offset_ = [0, 0]
         self._on_platform_ = False
         self._direction_offset_ = 0
         self._stance_offset_ = 0
         self._tile_row_ = 0
+        self._jump_vel_ = TILE_DIM * 0.2
         
         if random.randrange(0, 100) > 80:
             self.power_flag = 1
@@ -75,7 +78,7 @@ class enemy:
         if goal[0] > self._position_[0]:
             self._direction_offset_ = 6
  #         self._stance_offset_ = 1
-            if random.randrange(0,100) > 50:
+            if random.randrange(0,100) > 30:
                 self._offset_[0] = speed[0]
             else:
                 self._offset_[0] = 0
@@ -84,7 +87,7 @@ class enemy:
         elif goal[0] < self._position_[0]:
             self._direction_offset_ = 0
         # self._stance_offset_ = 1
-            if random.randrange(0,100) > 50:
+            if random.randrange(0,100) > 30:
                 self._offset_[0] = -speed[0]
             else:
                 self._offset_[0] = 0
@@ -105,21 +108,27 @@ class enemy:
         # if they are on the ground or on a platform then randomly jump
         if (goal[1] < self._position_[1] and self._position_[1] == HEIGHT - 1.25 * TILE_DIM) or self._on_platform_ is True:
             if random.randrange(0, 100) > 90:
-                self._offset_[1] = -0.2*speed[1] + gravity[1]
+                self._offset_[1] -= self._jump_vel_
                 self._on_platform_ = False
 
-            else:
-                self._offset_[1] = 0
+#            else:
+#                self._offset_[1] = 0
         # if enemy is in midair and offset is not too great
-        elif self._offset_[1] < 0 and self._offset_[1] > -0.5*speed[1]:
-            self._offset_[1] = self._offset_[1] - 5*gravity[1]
+#        elif self._offset_[1] < 0 and self._offset_[1] > -0.5*speed[1]:
+#            self._offset_[1] = self._offset_[1] - 5*gravity[1]
 
-        else:
-            self._offset_[1] = 2*gravity[1]
+#        else:
+#            self._offset_[1] = 2*gravity[1]
+
+        #gravity
+        self._offset_[1] += TILE_DIM * shooter_global_variables.GRAVITY / 100
+
+        if self._offset_[1] >= player_speed * 5:
+            self._offset_[1] = player_speed * 5
 
 
-# if on the ground then move
-        if self._offset_[1] == 0:
+        # if on the ground then move
+        if self._on_platform_ is True:
             self._position_[0] = self._position_[0] + self._offset_[0]
         else:
             self._position_[0] = self._position_[0] + 0.25*self._offset_[0]
@@ -181,11 +190,11 @@ class enemy:
             # image
             ENEMY_TILEMAP,
             # center_source, rows then columns
-            [(0.5 + self._tile_row_ ) * 90, (0.5 + self._stance_offset_+ self._direction_offset_) * 90],
+            [(0.5 + self._tile_row_) * 90, (0.5 + self._stance_offset_ + self._direction_offset_) * 90],
             # width_height_source
             [90, 90],
             # center_dest
-            [self._position_[0], self._position_[1] - 25],
+            [self._position_[0], self._position_[1]],
             # width_height_dest
             [90, 90])
 
