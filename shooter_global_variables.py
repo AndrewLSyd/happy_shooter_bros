@@ -14,7 +14,7 @@ HEIGHT = 675
 TILE_ROWS = 11.25
 TILE_COLS = 20
 TILE_DIM = WIDTH / TILE_COLS
-
+GRAVITY = 0.8
 
 class ImageInfo:
     """

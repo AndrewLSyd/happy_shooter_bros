@@ -38,8 +38,8 @@ class GUI:
         self._player_ = player
         #
         self._platform_group_ = platform_group
-        self._keydown_inputs_ = {"left": self.move_left, "right": self.move_right, "up": self.jump}
-        self._keyup_inputs_ = {"left": self.stop_left, "right": self.stop_right}
+        self._keydown_inputs_ = {"left": self.move_left, "right": self.move_right, "up": self.jump, "down":self.crouch}
+        self._keyup_inputs_ = {"left": self.stop_left, "right": self.stop_right, "down":self.stop_crouch}
         # enemy list
         self._enemy_list_ = enemy_list
         self._enemy_speed_ = enemy_speed
@@ -86,6 +86,20 @@ class GUI:
         :return: None
         """
         self._player_.jump()
+
+    def crouch(self):
+        """
+        crouches player object
+        :return: None
+        """
+        self._player_.crouch()
+
+    def stop_crouch(self):
+        """
+        stop crouching the player object
+        :return: None
+        """
+        self._player_.stop_crouch()
 
     def keydown_handler(self, key):
         """

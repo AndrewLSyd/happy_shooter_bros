@@ -55,12 +55,16 @@ class Player:
         self._health_ = health
         self._on_platform_ = False
         self._radius_ = 35
-        self._move_speed_ = TILE_DIM / 10
-        self._jump_vel_ = TILE_DIM / 5
-        self._tilemap_coord_ = [1, 1]
-        # integer value between 0 and 100 inclusive representing state in walk cycle
-        self._walk_cycle_pos_ = 0
+        self._move_speed_run = TILE_DIM * 0.1
+        self._move_speed_crouch = self._move_speed_run * 0.5
+        self._move_speed_ = self._move_speed_run
+        self._jump_vel_ = TILE_DIM * 0.2
+        self._tilemap_coord_ = [1, 1]       
+        self._walk_cycle_pos_ = 0  # integer value between 0 and 100 inclusive representing state in walk cycle
+        # tilemap offsets
         self._direction_offset_ = 0
+        self._stance_offset_ = 0
+        self._crouching = False
 
         PLATFORM_HIST = [deepcopy(self._pos_)]
 
@@ -69,16 +73,21 @@ class Player:
         move left/right
         :return:
         """
+
         if direction == "left":
             print("player move_left")
             self._vel_[0] = -self._move_speed_
             self._direction_offset_ = 5
+            if self._on_platform_:
+                self._stance_offset_ = 1
 
 
         elif direction == "right":
             print("player move_right")
             self._vel_[0] = self._move_speed_
             self._direction_offset_ = 0
+            if self._on_platform_:
+                self._stance_offset_ = 1
 
     # movement
     def jump(self):
@@ -92,6 +101,8 @@ class Player:
             self._vel_[1] -= self._jump_vel_
             self._on_platform_ = False
             self._tilemap_coord_ = [0, 1]
+            self._stance_offset_ = 4
+            self._walk_cycle_pos_ = 0
 
     def stop(self, direction):
         """
@@ -103,6 +114,24 @@ class Player:
             self._vel_[0] = 0
         elif direction == "right" and self._vel_[0] > 0:
             self._vel_[0] = 0
+        if self._on_platform_:
+            self._stance_offset_ = 0
+
+    def crouch(self):
+        """
+        crouches player
+        """
+        self._crouching = True
+        self._move_speed_ = self._move_speed_crouch
+        print("player crouched")
+
+    def stop_crouch(self):
+        """
+        crouches player
+        """
+        self._crouching = False
+        self._move_speed_ = self._move_speed_run
+        print("player stopped crouching")
 
     # drawing and updating
     def draw(self, canvas):
@@ -114,8 +143,8 @@ class Player:
         canvas.draw_image(
             # image
             PLAYER_TILEMAP,
-            # center_source
-            [(self._tilemap_coord_[0] + 0.5) * 70, (self._tilemap_coord_[1] + 0.5 + self._direction_offset_) * 70],
+            # center_source, rows then columns           
+            [(0.5 + self._walk_cycle_pos_ // 50) * 70, (0.5 + self._direction_offset_ + self._stance_offset_) * 70],
             # width_height_source
             [70, 70],
             # center_dest
@@ -131,7 +160,7 @@ class Player:
         :return: None
         """
         # gravity
-        self._vel_[1] += TILE_DIM / 120
+        self._vel_[1] += TILE_DIM * shooter_global_variables.GRAVITY / 100
         # terminal velocity for gravity
         if self._vel_[1] >= self._move_speed_ * 5:
             self._vel_[1] = self._move_speed_ * 5
@@ -140,16 +169,41 @@ class Player:
         self._pos_[0] += self._vel_[0]
         self._pos_[1] += self._vel_[1]
 
-        # if self._tilemap_coord_[0] == 1:
-        #     self._tilemap_coord_[0] = 0
-        # elif self._tilemap_coord_[0] == 0:
-        #     self._tilemap_coord_[0] = 1
-
+        # when in the air
+        if not self._on_platform_:
+            self._stance_offset_ = 4
+            self._walk_cycle_pos_ = 0
+            self._move_speed_ = self._move_speed_run
+            if self._vel_[0] > 0 and self._on_platform_:
+                self._vel_[0] = self._move_speed_
+            elif self._vel_[0] < 0 and self._on_platform_:
+                self._vel_[0] = -self._move_speed_          
+        
+        # otherwise when on a platform
+        elif self._on_platform_:
+            if self._crouching:
+                self._move_speed_ = self._move_speed_crouch
+                if self._vel_[0] > 0 and self._on_platform_:
+                    self._vel_[0] = self._move_speed_
+                elif self._vel_[0] < 0 and self._on_platform_:
+                    self._vel_[0] = -self._move_speed_          
+            
+            if self._vel_[0] == 0:
+                self._stance_offset_ = 0
+            else:
+                self._stance_offset_ = 1        
+        
+        if self._crouching:
+            self._stance_offset_ = 3
+            
         # if moving update walk cycle
-        if abs(self._vel_[0]) > 0 and self._on_platform_:
+        if abs(self._vel_[0]) > 0:            
             self._walk_cycle_pos_ = (self._walk_cycle_pos_ + 15) % 100
-            self._tilemap_coord_ = [0 + self._walk_cycle_pos_ // 50, 1]
-            print("self._walk_cycle_pos_:", self._walk_cycle_pos_)
+            # update speed for crouched movement
+            if self._vel_[0] > 0 and self._on_platform_:
+                self._vel_[0] = self._move_speed_
+            elif self._vel_[0] < 0 and self._on_platform_:
+                self._vel_[0] = -self._move_speed_          
 
     def collide_platform(self, platform):
         """
@@ -160,8 +214,8 @@ class Player:
         plat_left = platform.get_top_left()
         plat_right = platform.get_top_right()
         # y collision to a tolerance of 3 pixels
-        collide_y_down = self._pos_[1] + self._radius_ > (plat_left[1] - 7.5)
-        collide_y_up = self._pos_[1] + self._radius_ < (plat_left[1] + 7.5)
+        collide_y_down = self._pos_[1] + self._radius_ > (plat_left[1] - max(2.5, 0.5 * abs(self._vel_[1])))
+        collide_y_up = self._pos_[1] + self._radius_ < (plat_left[1] + max(2.5, 0.5 * abs(self._vel_[1])))
         collide_y = collide_y_up and collide_y_down
         # x collision
         collide_x_left = self._pos_[0] >= plat_left[0]
