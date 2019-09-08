@@ -15,7 +15,8 @@ TOP_WALL = 0
 
 gravity = [0, 3]
 line = [0, 0]
- 
+
+ENEMY_TILEMAP = simplegui._load_local_image("Assets/Tilemaps/Tilemap_enemies_90x90.png")
 
 WIDTH = shooter_global_variables.WIDTH
 HEIGHT = shooter_global_variables.HEIGHT
@@ -44,32 +45,62 @@ class enemy:
         self._on_platform_ = False
         self._offset_ = [0, 0]
         self._on_platform_ = False
+        self._direction_offset_ = 0
+        self._stance_offset_ = 0
+        self._tile_row_ = 0
         
         if random.randrange(0, 100) > 80:
             self.power_flag = 1
         else:
             self.power_flag = 0
+
+#enemy tile asset mapping
+        self._tile_row_ = random.randint(0,3)
+
+#        if random.randrange(0, 100) <= 25:
+ #           self._tile_row_ = 0
+  #      elif random.randrange(0, 100) <= 50:
+   #         self._tile_row_ = 1
+    #    elif random.randrange(0, 100) <= 75:
+     #       self._tile_row_ = 2
+      ##     self._tile_row_ = 3
+
        
     # movement
     def move(self, goal, speed):
         
         # horizontal
+
+        #move to the right
         if goal[0] > self._position_[0]:
+            self._direction_offset_ = 6
+ #         self._stance_offset_ = 1
             if random.randrange(0,100) > 50:
                 self._offset_[0] = speed[0]
             else:
-                self._offset_[0] = 0.5*speed[0]
+                self._offset_[0] = 0
+
+        # move to the left
         elif goal[0] < self._position_[0]:
+            self._direction_offset_ = 0
+        # self._stance_offset_ = 1
             if random.randrange(0,100) > 50:
                 self._offset_[0] = -speed[0]
             else:
-                self._offset_[0] = -0.5*speed[0]
+                self._offset_[0] = 0
+
         elif goal == self._position_[0]:
+            self._stance_offset_ = 0
+
             if random.range(0, 100) > 60:
-                self._offset_[0] = 0.6*speed[0]
+ #               self._stance_offset_ = 1
+
+                self._offset_[0] = 10*speed[0]
             elif random.range(0, 100) < 40:
-                self._offset_[0] = -0.6*speed[0]
-        
+#                self._stance_offset_ = 1
+                self._offset_[0] = -10*speed[0]
+
+
         # vertical
         # if they are on the ground or on a platform then randomly jump
         if (goal[1] < self._position_[1] and self._position_[1] == HEIGHT - 1.25 * TILE_DIM) or self._on_platform_ is True:
@@ -82,11 +113,12 @@ class enemy:
         # if enemy is in midair and offset is not too great
         elif self._offset_[1] < 0 and self._offset_[1] > -0.5*speed[1]:
             self._offset_[1] = self._offset_[1] - 5*gravity[1]
-            print(speed[1], gravity[1], self._offset_[1])
 
         else:
-            self._offset_[1] = gravity[1]
+            self._offset_[1] = 2*gravity[1]
 
+
+# if on the ground then move
         if self._offset_[1] == 0:
             self._position_[0] = self._position_[0] + self._offset_[0]
         else:
@@ -96,6 +128,15 @@ class enemy:
           
         if self._position_[1] > HEIGHT - 1.25 * TILE_DIM:
             self._position_[1] = HEIGHT - 1.25 * TILE_DIM
+
+        # trying to sort animation, if moving then move animation
+        if self._offset_[0] == 0:
+            self._stance_offset_ = 0
+        else:
+            if self._stance_offset_ == 1:
+                self._stance_offset_ = 0
+            elif self._stance_offset_ == 0:
+                self._stance_offset_ = 1
 
     def collide_platform(self, platform):
         """
@@ -135,5 +176,18 @@ class enemy:
             canvas.draw_line([self._position_[0], self._position_[1]], [line[0], line[1]], 2, "white")
 
         canvas.draw_circle(self._position_, self._radius_, 1, self.colour)
-        
+
+        canvas.draw_image(
+            # image
+            ENEMY_TILEMAP,
+            # center_source, rows then columns
+            [(0.5 + self._tile_row_ ) * 90, (0.5 + self._stance_offset_+ self._direction_offset_) * 90],
+            # width_height_source
+            [90, 90],
+            # center_dest
+            [self._position_[0], self._position_[1] - 25],
+            # width_height_dest
+            [90, 90])
+
+        print((0.5 + self._stance_offset_)*90)
 
