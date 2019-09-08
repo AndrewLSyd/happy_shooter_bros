@@ -8,6 +8,7 @@ import shooter_platform
 import shooter_gui
 import shooter_enemy
 import random
+from copy import deepcopy
 
 #  __      _____ _       _           _
 # /_ |    / ____| |     | |         | |
@@ -25,8 +26,9 @@ TILE_DIM = shooter_global_variables.TILE_DIM
 BOTTOM_WALL = 400
 RIGHT_WALL = 600
 
+bullet_group = set([])
 # initialize player
-PLAYER = shooter_player.Player([WIDTH // 3, HEIGHT // 5], 100)
+PLAYER = shooter_player.Player([WIDTH // 3, HEIGHT // 5], 100, bullet_group)
 # initialise platforms
 # position uses "matrix notation of rows/cols"
 # [tile pos rows, tile pos cols, tile map x coord, tile map y coord (computing one)]
@@ -34,7 +36,7 @@ PLAYER = shooter_player.Player([WIDTH // 3, HEIGHT // 5], 100)
 PLAT_MAP1 = [
     [6, 12, 0, 0], [6, 13, 4, 0]
     , [7, 7, 1, 1], [7, 8, 1, 1], [7, 9, 1, 1], [7, 10, 1, 1]
-    , [4, 7, 1, 1], [4, 5, 1, 1], [4, 9, 1, 1], [4, 10, 1, 1]] +\
+    , [4, 7, 1, 1], [4, 5, 1, 1], [4, 9, 1, 1], [4, 10, 1,  1]] +\
             [[9, index, 6, 0] for index in range(TILE_COLS)] +\
             [[10, index, 1, 1] for index in range(TILE_COLS)]
 
@@ -55,4 +57,6 @@ for i in range(10):
 
 # initialise GUI with player and platform_group object
 # GUI takes PLAT_TILE_MAP as another argument
-GUI = shooter_gui.GUI(PLAYER, PLATFORM_GROUP, enemy_list, enemy_speed)
+
+
+GUI = shooter_gui.GUI(PLAYER, PLATFORM_GROUP, enemy_list, enemy_speed, bullet_group)

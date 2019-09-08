@@ -7,6 +7,7 @@ except ImportError:
     import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 
 import shooter_global_variables
+import shooter_player
 
 #  __      _____ _       _           _
 # /_ |    / ____| |     | |         | |
@@ -33,13 +34,14 @@ class GUI:
     Class to run game GUI.
     """
 
-    def __init__(self, player, platform_group, enemy_list, enemy_speed):
+    def __init__(self, player, platform_group, enemy_list, enemy_speed, bullet_list):
         self._frame_ = simplegui.create_frame("Happy Shooter Bros - Engine", WIDTH, HEIGHT)
         self._player_ = player
-        #
+        self._bullet_list_ = bullet_list
+
         self._platform_group_ = platform_group
-        self._keydown_inputs_ = {"left": self.move_left, "right": self.move_right, "up": self.jump, "down":self.crouch}
-        self._keyup_inputs_ = {"left": self.stop_left, "right": self.stop_right, "down":self.stop_crouch}
+        self._keydown_inputs_ = {"left": self.move_left, "right": self.move_right, "up": self.jump, "down":self.crouch, "space":self.shoot}
+        self._keyup_inputs_ = {"left": self.stop_left, "right": self.stop_right, "down":self.stop_crouch,}
         # enemy list
         self._enemy_list_ = enemy_list
         self._enemy_speed_ = enemy_speed
@@ -48,6 +50,7 @@ class GUI:
         self._frame_.set_keyup_handler(self.keyup_handler)
         self._frame_.add_button('Reset player', self.reset_player)
         self._frame_.start()
+        
 
 
     # 4. DEFINE EVENT HANDLERS
@@ -121,12 +124,18 @@ class GUI:
             if key == simplegui.KEY_MAP[i]:
                 self._keyup_inputs_[i]()
 
+    def shoot(self):
+        """
+        :param key:
+        :return:
+        """
+        self._player_.shoot()
+        
     def reset_player(self):
         self._player_._pos_ = [WIDTH // 2, HEIGHT // 3]
 
     def draw(self, canvas):
         """
-
         :param canvas:
         :return:
         """
@@ -148,11 +157,14 @@ class GUI:
         # draw enemy
         for e in self._enemy_list_:
             e.move(self._player_._pos_, self._enemy_speed_)
-        for e in self._enemy_list_:
             e.draw2(canvas)
 
         # player
         self._player_.update()
         self._player_.draw(canvas)
+
+        for bullet in self._player_.bullet_group:
+            bullet.update()
+            bullet.draw(canvas)
 
     # need change level function
