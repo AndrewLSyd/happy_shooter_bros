@@ -229,8 +229,8 @@ class Player:
         plat_left = platform.get_top_left()
         plat_right = platform.get_top_right()
         # y collision to a tolerance of 3 pixels
-        collide_y_down = self._pos_[1] + self._radius_ > (plat_left[1] - max(2.5, 0.5 * abs(self._vel_[1])))
-        collide_y_up = self._pos_[1] + self._radius_ < (plat_left[1] + max(2.5, 0.5 * abs(self._vel_[1])))
+        collide_y_down = self._pos_[1] + self._radius_ > (plat_left[1] - max(5, 0.5 * abs(self._vel_[1])))
+        collide_y_up = self._pos_[1] + self._radius_ < (plat_left[1] + max(5, 0.5 * abs(self._vel_[1])))
         collide_y = collide_y_up and collide_y_down
         # x collision
         collide_x_left = self._pos_[0] >= plat_left[0]
