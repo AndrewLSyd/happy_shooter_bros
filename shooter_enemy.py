@@ -37,10 +37,10 @@ class enemy:
     # random starting position that is on the edge of the screen, assuming start position is left side of screen
         if random.randrange(0, 100) > 50:
             start_pos[0] = start_pos[0] + 50
-            start_pos[1] = start_pos[1] - 50
+            start_pos[1] = start_pos[1] - 80
         else:
             start_pos[0] = start_pos[0] - WIDTH - 50
-            start_pos[1] = start_pos[1] - 50
+            start_pos[1] = start_pos[1] - 80
 
         self._position_ = start_pos
         self.colour = colour
@@ -51,7 +51,7 @@ class enemy:
         self._stance_offset_ = 0
         self._tile_row_ = 0
         self._jump_vel_ = TILE_DIM * 0.2
-        
+
         if random.randrange(0, 100) > 80:
             self.power_flag = 1
         else:
@@ -68,10 +68,10 @@ class enemy:
      #       self._tile_row_ = 2
       ##     self._tile_row_ = 3
 
-       
+
     # movement
     def move(self, goal, speed):
-        
+
         # horizontal
 
         #move to the right
@@ -106,7 +106,7 @@ class enemy:
 
         # vertical
         # if they are on the ground or on a platform then randomly jump
-        if (goal[1] < self._position_[1] and self._position_[1] == HEIGHT - 1.25 * TILE_DIM) or self._on_platform_ is True:
+        if (goal[1] < self._position_[1] and self._position_[1] == HEIGHT - 2.5 * TILE_DIM) or self._on_platform_ is True:
             if random.randrange(0, 100) > 90:
                 self._offset_[1] -= self._jump_vel_
                 self._on_platform_ = False
@@ -134,9 +134,9 @@ class enemy:
             self._position_[0] = self._position_[0] + 0.25*self._offset_[0]
 
         self._position_[1] += self._offset_[1]
-          
-        if self._position_[1] > HEIGHT - 1.25 * TILE_DIM:
-            self._position_[1] = HEIGHT - 1.25 * TILE_DIM
+
+        if self._position_[1] > HEIGHT - 2.5 * TILE_DIM:
+            self._position_[1] = HEIGHT - 2.5 * TILE_DIM
 
         # trying to sort animation, if moving then move animation
         if self._offset_[0] == 0:
@@ -156,8 +156,8 @@ class enemy:
         plat_left = platform.get_top_left()
         plat_right = platform.get_top_right()
         # y collision to a tolerance of 3 pixels
-        collide_y_down = self._position_[1] + self._radius_ > (plat_left[1] - 3)
-        collide_y_up = self._position_[1] + self._radius_ < (plat_left[1] + 3)
+        collide_y_down = self._position_[1] + self._radius_ > (plat_left[1] - 10)
+        collide_y_up = self._position_[1] + self._radius_ < (plat_left[1] + 10)
         collide_y = collide_y_up and collide_y_down
         # x collision
         collide_x_left = self._position_[0] >= plat_left[0]
