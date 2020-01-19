@@ -87,8 +87,8 @@ class Platform:
         canvas.draw_image(PLATFORM_TILEMAP, BACKGROUND_INFO.get_center(), BACKGROUND_INFO.get_size(), [WIDTH / 2, HEIGHT / 2],
                   [WIDTH, HEIGHT])
         """
-        # canvas.draw_polygon([self._top_left_, self._top_right_, self._bot_right_, self._bot_left_],
-        #                     3, "red")
+        canvas.draw_polygon([self._top_left_, self._top_right_, self._bot_right_, self._bot_left_],
+                            3, "red")
         # draw_image(image, center_source, width_height_source, center_dest, width_height_dest, rotation=0)
         # print("self._tilemap_coord[0]", self._tilemap_coord[0])
         # print("self._tilemap_coord[1]", self._tilemap_coord[1])
@@ -104,9 +104,9 @@ class Platform:
             self._pos_,
             # width_height_dest
             PLATFORM_INFO.get_size())
-        # canvas.draw_text(str(round(self._pos_[1] / TILE_DIM - 1)) + ", "
-        #                  + str(round(self._pos_[0] / TILE_DIM - 1)),
-        #                  [self._top_left_[0] + TILE_DIM / 3, self._pos_[1]], 20, "white")
+        canvas.draw_text(str(round(self._pos_[1] / TILE_DIM - 1)) + ", "
+                         + str(round(self._pos_[0] / TILE_DIM - 1)),
+                         [self._top_left_[0] + TILE_DIM / 3, self._pos_[1]], 20, "white")
         # draw tilemap here
 
     def get_top_left(self):

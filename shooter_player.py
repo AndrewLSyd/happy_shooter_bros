@@ -6,7 +6,6 @@ import shooter_global_variables
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 from copy import deepcopy
 import random
-from math import sin, cos, pi
 
 #  __      _____ _       _           _
 # /_ |    / ____| |     | |         | |
@@ -104,14 +103,12 @@ class Player:
     def shoot(self):
         # recoil variable, higher recoil if not crouching
         crouch_offset = self._crouching_ * PLAYER_RADIUS * 2 / 7
-        # recoil = random.randint(-5, 20) + max(0, self._crouching_ - 1) * random.randint(-5, 6)
-        # random angle between - pi / 4 and pi / 4 (45 degrees)
-        recoil = - pi / 32 + random.randint(1, 11) * pi / 16 / 11
+        recoil = random.randint(-5, 20) + max(0, self._crouching_ - 1) * random.randint(-5, 6)
 # pos, direction, rotation
-        if self._direction_offset_:  # if facing the left
-            a_bullet = Bullet(deepcopy([self.get_pos()[0] - PLAYER_RADIUS * 5 / 7, self.get_pos()[1] + PLAYER_RADIUS * 1.7 / 6 + crouch_offset]), 'left', recoil)
-        else:  # if facing the right
-            a_bullet = Bullet(deepcopy([self.get_pos()[0] + PLAYER_RADIUS * 5 / 7, self.get_pos()[1] + PLAYER_RADIUS * 1.7 / 6 + crouch_offset]), 'right', recoil)
+        if self._direction_offset_:
+            a_bullet = Bullet(deepcopy([self.get_pos()[0] - PLAYER_RADIUS * 5 / 7, self.get_pos()[1] + crouch_offset + recoil]), 'left', 0)
+        else:
+            a_bullet = Bullet(deepcopy([self.get_pos()[0] + PLAYER_RADIUS * 5 / 7, self.get_pos()[1] + crouch_offset + recoil]), 'right', 0)
         self.bullet_group.add(a_bullet)
 
     # movement
@@ -173,7 +170,7 @@ class Player:
             self._pos_,
             # width_height_dest
             [70, 70])
-        # canvas.draw_circle([self._pos_[0], self._pos_[1]], self._radius_, 2, "red")
+        canvas.draw_circle([self._pos_[0], self._pos_[1]], self._radius_, 2, "red")
         
 
     def update(self):
@@ -281,14 +278,13 @@ class Bullet:
     """
     Bullet class
     """
-    def __init__(self, pos, direction, angle):
+    def __init__(self, pos, direction, rotation):
         self._pos_ = pos     
         self._direction_ = direction   
         self._age_ = 0
         self._life_span_ = 25
-        self._radius_ = 16                
-        self._angle_ = angle  # radians upwards from horizontal
-        self._vel_ = [BULLET_SPEED * cos(angle), BULLET_SPEED * sin(angle)]
+        self._radius_ = 16
+        self._vel_ = [BULLET_SPEED, 0]
 
     def update(self):
         """
@@ -322,8 +318,7 @@ class Bullet:
                 # center_dest
                 self._pos_,
                 # width_height_dest
-                [32, 16],
-                rotation=self._angle_)
+                [32, 16])
         else:
             canvas.draw_image(
                 # image
@@ -335,10 +330,9 @@ class Bullet:
                 # center_dest
                 self._pos_,
                 # width_height_dest
-                [32, 16],
-                rotation=self._angle_)
+                [32, 16])
 
-        # canvas.draw_circle([self._pos_[0], self._pos_[1]], self._radius_, 2, "red")
+        canvas.draw_circle([self._pos_[0], self._pos_[1]], self._radius_, 2, "red")
     def get_age(self):
         """
         returns the age
