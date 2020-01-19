@@ -182,7 +182,7 @@ class enemy:
             line_end = [50*math.cos(ang), 50*math.sin(ang)]
             line[0] = self._position_[0] + line_end[0]
             line[1] = self._position_[1] - line_end[1]
-            canvas.draw_line([self._position_[0], self._position_[1]], [line[0], line[1]], 2, "white")
+            canvas.draw_line([self._position_[0], self._position_[1]], [line[0], line[1]], 3, "black")
 
         canvas.draw_circle(self._position_, self._radius_, 1, self.colour)
 
@@ -194,7 +194,7 @@ class enemy:
             # width_height_source
             [90, 90],
             # center_dest
-            [self._position_[0], self._position_[1]],
+            [self._position_[0], self._position_[1] - 20],
             # width_height_dest
             [90, 90])
 

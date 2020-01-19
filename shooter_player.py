@@ -78,6 +78,7 @@ class Player:
         self._stance_offset_ = 0
         self._crouching_ = False
         self.bullet_group = bullet_group  # set used to hold bullet objects
+        self._player_plat_hist_ = []
 
     def move(self, direction):
         """
@@ -246,11 +247,33 @@ class Player:
         # moving down
         if collide_x and collide_y and moving_down:
             # print("player collided with platform")
+            # print(self._pos_)
             self._on_platform_ = True
             # set vertical vel to 0 and set vertical pos to top of tile
             self._vel_[1] = 0
             self._pos_[1] = plat_left[1] - self._radius_
             self._tilemap_coord_ = [0, 0]
+
+            if len(self._player_plat_hist_) <= 6:
+                if len(self._player_plat_hist_) == 0:
+                    pos_holder = deepcopy(self._pos_)
+                    self._player_plat_hist_.append(pos_holder)
+                    # print(self._player_plat_hist_)
+                    # print(len(self._player_plat_hist_))
+                elif len(self._player_plat_hist_) == 6:
+                    # print("pop")
+                    self._player_plat_hist_.pop(0)
+                else:
+                # for i in range(len(self._player_plat_hist_)):
+                #     print("play_hist")
+                    i = len(self._player_plat_hist_) - 1
+
+                    if self._pos_[1] != self._player_plat_hist_[i][1]:
+                        # print("second append")
+                        pos_holder = deepcopy(self._pos_)
+                        self._player_plat_hist_.append(pos_holder)
+                # print(self._player_plat_hist_)
+
 
     # getters and setters
     def set_pos(self, pos):
